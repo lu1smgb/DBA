@@ -10,6 +10,12 @@ public class Mapa {
     private int num_columnas;
     private ArrayList<ArrayList<Integer>> mapa;
 
+    public Mapa() {
+
+        this("Mapa sin nombre", 0, 0);
+
+    }
+
     public Mapa(String nombre, int num_filas, int num_columnas) {
 
         this.nombre = nombre;
@@ -29,6 +35,8 @@ public class Mapa {
     }
 
     public void imprimir() {
+
+        System.out.println(nombre);
         
         for (int i=0; i < num_filas; i++) {
             for (int j=0; j < num_columnas; j++) {
