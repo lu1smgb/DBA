@@ -138,8 +138,8 @@ public class Map {
         this.num_columns = (num_columns >= 0 ? num_columns : 0);
         this.map = map;
 
-        replaceUnwantedElements();
         adjustMapToDimensions();
+        replaceUnwantedElements();
         
     }
 
@@ -215,6 +215,7 @@ public class Map {
     public void setNumberOfRows(int num_rows) {
         
         this.num_rows = (num_rows >= 0 ? num_rows : 0);
+        adjustMapToDimensions();
 
     }
 
@@ -240,6 +241,7 @@ public class Map {
     public void setNumberOfColumns(int num_columns) {
 
         this.num_columns = (num_columns >= 0 ? num_columns : 0);
+        adjustMapToDimensions();
 
     }
 
@@ -343,7 +345,7 @@ public class Map {
      */
     public void replaceUnwantedElements() {
 
-        for (int i=0; i < this.num_rows; i++) {
+        for (int i=0; i < num_rows; i++) {
             for (int j=0; j < num_columns; j++) {
                 int element = this.getElement(i, j);
                 if (element != -1 && element != 0) {
