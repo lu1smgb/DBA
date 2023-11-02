@@ -11,7 +11,7 @@ import java.lang.String;
 /**
  * Clase para almacenar informacion de un mapa
  */
-public class Map {
+public class Mapa {
     
     private String name = "Unnamed map";
     private int num_rows;
@@ -23,7 +23,7 @@ public class Map {
      * Construye un mapa vacio, sin dimensiones especificadas
      * @see #Map(int, int)
      */
-    public Map() {
+    public Mapa() {
 
         this(0, 0);
 
@@ -36,7 +36,7 @@ public class Map {
      * @param num_rows Numero de filas del mapa
      * @param num_columns Numero de columnas del mapa
      */
-    public Map(int num_rows, int num_columns) {
+    public Mapa(int num_rows, int num_columns) {
 
         this.num_rows = (num_rows >= 0 ? num_rows : 0);
         this.num_columns = (num_columns >= 0 ? num_columns : 0);
@@ -60,7 +60,7 @@ public class Map {
      * @param name Nombre del mapa
      * @see #Map(String, int, int)
      */
-    public Map(String name) {
+    public Mapa(String name) {
 
         this(name, 0, 0);
 
@@ -77,7 +77,7 @@ public class Map {
      * @param num_columns Numero de columnas del mapa
      * @see #Map(int, int)
      */
-    public Map(String name, int num_rows, int num_columns) {
+    public Mapa(String name, int num_rows, int num_columns) {
 
         this(num_rows, num_columns);
         this.name = name;
@@ -97,7 +97,7 @@ public class Map {
      * 
      * @param map Array bidimensional de enteros del cual se generara el mapa
      */
-    public Map(ArrayList<ArrayList<Integer>> map) {
+    public Mapa(ArrayList<ArrayList<Integer>> map) {
 
         this.num_rows = map.size();
         int max_cols = 0;
@@ -132,7 +132,7 @@ public class Map {
      * @see #replaceUnwantedElements()
      * @see #adjustMapToDimensions()
      */
-    public Map(int num_rows, int num_columns, ArrayList<ArrayList<Integer>> map) {
+    public Mapa(int num_rows, int num_columns, ArrayList<ArrayList<Integer>> map) {
 
         this.num_rows = (num_rows >= 0 ? num_rows : 0);
         this.num_columns = (num_columns >= 0 ? num_columns : 0);
@@ -163,7 +163,7 @@ public class Map {
      * @param map Array bidimensional de enteros del cual se generara el mapa
      * @see #Map(int, int, ArrayList)
      */
-    public Map(String name, int num_rows, int num_columns, ArrayList<ArrayList<Integer>> map) {
+    public Mapa(String name, int num_rows, int num_columns, ArrayList<ArrayList<Integer>> map) {
 
         this(num_rows, num_columns, map);
         this.name = name;

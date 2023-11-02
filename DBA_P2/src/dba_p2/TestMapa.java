@@ -25,7 +25,7 @@ public class TestMapa {
 
         // Instanciacion del mapa con nuevas dimensiones
         try {
-            Map m = new dba_p2.Map("Mi mapa", 10, 12, datos);
+            Mapa m = new dba_p2.Mapa("Mi mapa", 10, 12, datos);
             System.out.print(m);
         }
         catch (Exception e) {
