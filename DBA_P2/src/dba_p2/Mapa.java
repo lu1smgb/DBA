@@ -169,6 +169,54 @@ public class Mapa {
         this.name = name;
 
     }
+
+    private ArrayList<ArrayList<Integer>> toArrayList(int[][] arr) {
+        ArrayList<ArrayList<Integer>> arr_list = new ArrayList<ArrayList<Integer>>();
+        for (int i=0; i < arr.length; i++) {
+            int[] old_row = arr[i];
+            ArrayList<Integer> new_row = new ArrayList<Integer>();
+            for (int j=0; j < old_row.length; j++) {
+                new_row.add(old_row[j]);
+            } 
+            arr_list.add(new_row);
+        }
+        return arr_list;
+    }
+
+    public Mapa(int[][] map) {
+        
+        this.num_rows = map.length;
+        int max_cols = 0;
+        for (int i=0; i < this.num_rows; i++) {
+            int[] row = map[i];
+            int row_size = row.length;
+            if (row_size > max_cols) {
+                max_cols = row_size;
+            }
+        }
+        this.num_columns = max_cols;
+        this.map = toArrayList(map);
+        replaceUnwantedElements();
+
+    }
+
+    public Mapa(int num_rows, int num_columns, int[][] map) {
+
+        this.num_rows = (num_rows >= 0 ? num_rows : 0);
+        this.num_columns = (num_columns >= 0 ? num_columns : 0);
+        this.map = toArrayList(map);
+
+        adjustMapToDimensions();
+        replaceUnwantedElements();
+
+    }
+
+    public Mapa(String name, int num_rows, int num_columns, int[][] map) {
+
+        this(num_rows, num_columns, map);
+        this.name = name;
+
+    }
     
     // ******************************************************************************************
 
