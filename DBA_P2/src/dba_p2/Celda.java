@@ -4,18 +4,18 @@ public enum Celda {
 
     WALL(-1), VOID(0);
 
-    private int id;
+    private int value;
 
-    Celda(int id) {
-        this.id = id;
+    Celda(int value) {
+        this.value = value;
     }
 
-    public int id() {
-        return id;
+    public int value() {
+        return value;
     }
 
-    public static void main(String[] args) {
-        System.out.println("WALL: " + Celda.WALL.id);
-        System.out.println("VOID: " + Celda.VOID.id);
-    }
+    // public static void main(String[] args) {
+    //     System.out.println("WALL: " + Celda.WALL.value);
+    //     System.out.println("VOID: " + Celda.VOID.value);
+    // }
 };
