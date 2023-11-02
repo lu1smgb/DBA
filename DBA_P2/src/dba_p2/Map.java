@@ -309,15 +309,11 @@ public class Map {
      */
     public void adjustMapToDimensions() {
 
-        if (map.size() > num_rows) {
-            while (map.size() > num_rows) {
-                map.remove(map.size()-1);
-            }
+        while (map.size() > num_rows) {
+            map.remove(map.size()-1);
         }
-        else {
-            while (map.size() < num_rows) {
-                map.add(new ArrayList<Integer>());
-            }
+        while (map.size() < num_rows) {
+            map.add(new ArrayList<Integer>());
         }
 
         int max_cols = 0;
@@ -325,15 +321,11 @@ public class Map {
 
             ArrayList<Integer> row = map.get(i);
 
-            if (row.size() > num_columns) {
-                while (row.size() > num_columns) {
-                    row.remove(row.size()-1);
-                }
+            while (row.size() > num_columns) {
+                row.remove(row.size()-1);
             }
-            else {
-                while (row.size() < num_columns) {
-                    row.add(0);
-                }
+            while (row.size() < num_columns) {
+                row.add(0);
             }
 
             int row_size = row.size();
