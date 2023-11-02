@@ -66,7 +66,7 @@ public class mapReader {
         }
         
         // construir mapa con lo leído
-        mapa = new Mapa(num_filas, num_columnas, matriz_mapa);
+        //////mapa = new Mapa(num_filas, num_columnas, matriz_mapa);
     }
     
     Mapa getMapa(){
