@@ -95,7 +95,8 @@ public class Mapa {
      * <p>
      * Tambien se reemplazaran los elementos invalidos segun {@link #replaceUnwantedElements()}
      * 
-     * @param map Array bidimensional de enteros del cual se generara el mapa
+     * @param map ArrayList bidimensional de enteros del cual se generara el mapa
+     * @see #Mapa(int[][])
      */
     public Mapa(ArrayList<ArrayList<Integer>> map) {
 
@@ -128,7 +129,7 @@ public class Mapa {
      * 
      * @param num_rows Numero de filas del mapa
      * @param num_columns Numero de columnas del mapa
-     * @param map Array bidimensional de enteros del cual se generara el mapa
+     * @param map ArrayList bidimensional de enteros del cual se generara el mapa
      * @see #replaceUnwantedElements()
      * @see #adjustMapToDimensions()
      */
@@ -160,7 +161,7 @@ public class Mapa {
      * @param name Nombre del mapa
      * @param num_rows Numero de filas del mapa
      * @param num_columns Numero de columnas del mapa
-     * @param map Array bidimensional de enteros del cual se generara el mapa
+     * @param map ArrayList bidimensional de enteros del cual se generara el mapa
      * @see #Map(int, int, ArrayList)
      */
     public Mapa(String name, int num_rows, int num_columns, ArrayList<ArrayList<Integer>> map) {
@@ -170,6 +171,17 @@ public class Mapa {
 
     }
 
+    /**
+     * <h2>Metodo privado toArrayList</h2>
+     * 
+     * Convierte un array 2D simple de enteros a un ArrayList 2D de Integer
+     * <p>
+     * Usado por los constructores que usan como parametro 
+     * arrays 2D primitivos (no ArrayList)
+     * 
+     * @param arr Array 2D simple a convertir
+     * @return Array convertido a ArrayList bidimensional
+     */
     private ArrayList<ArrayList<Integer>> toArrayList(int[][] arr) {
         ArrayList<ArrayList<Integer>> arr_list = new ArrayList<ArrayList<Integer>>();
         for (int i=0; i < arr.length; i++) {
@@ -183,6 +195,20 @@ public class Mapa {
         return arr_list;
     }
 
+    /**
+     * <h2>Constructor</h2>
+     * Crea un mapa a partir de un array bidimensional de enteros
+     * <p>
+     * Cada elemento dentro del array representa una casilla del mapa
+     * <p>
+     * Las dimensiones del mapa se ajustaran al numero de filas que tenga y 
+     * al maximo de columnas de todas las filas.
+     * <p>
+     * Tambien se reemplazaran los elementos invalidos segun {@link #replaceUnwantedElements()}
+     * 
+     * @param map Array bidimensional de enteros del cual se generara el mapa
+     * @see #Mapa(ArrayList)
+     */
     public Mapa(int[][] map) {
         
         this.num_rows = map.length;
@@ -200,6 +226,25 @@ public class Mapa {
 
     }
 
+    /**
+     * <h2>Constructor</h2>
+     * Crea un mapa a partir de sus dimensiones y un array bidimensional de enteros
+     * <p>
+     * Cada elemento dentro del array representa una casilla del mapa
+     * <p>
+     * El mapa se ajustara segun {@link #replaceUnwantedElements()} y {@link #adjustMapToDimensions()}
+     * <p>
+     * Se verificara que no se haya introducido un entero invalido
+     * en el array, en caso contrario, se sustituira por el entero que represente
+     * una casilla vacia.
+     * 
+     * @param num_rows Numero de filas del mapa
+     * @param num_columns Numero de columnas del mapa
+     * @param map Array bidimensional de enteros del cual se generara el mapa
+     * @see #Mapa(int, int, ArrayList)
+     * @see #replaceUnwantedElements()
+     * @see #adjustMapToDimensions()
+     */
     public Mapa(int num_rows, int num_columns, int[][] map) {
 
         this.num_rows = (num_rows >= 0 ? num_rows : 0);
@@ -211,6 +256,26 @@ public class Mapa {
 
     }
 
+    /**
+     * <h2>Constructor</h2>
+     * Crea un mapa a partir de un nombre, sus dimensiones 
+     * y un array bidimensional de enteros
+     * <p>
+     * Cada elemento dentro del array representa una casilla del mapa
+     * <p>
+     * Las dimensiones del mapa se ajustaran a las dimensiones 
+     * especificadas ({@link #num_rows}, {@link #num_columns})
+     * <p>
+     * Se verificara que no se haya introducido un entero invalido
+     * en el array, en caso contrario, se sustituira por el entero que represente
+     * una casilla vacia.
+     * 
+     * @param name Nombre del mapa
+     * @param num_rows Numero de filas del mapa
+     * @param num_columns Numero de columnas del mapa
+     * @param map Array bidimensional de enteros del cual se generara el mapa
+     * @see #Mapa(String, int, int, ArrayList)
+     */
     public Mapa(String name, int num_rows, int num_columns, int[][] map) {
 
         this(num_rows, num_columns, map);
