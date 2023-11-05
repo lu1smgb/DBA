@@ -10,12 +10,15 @@ import dba_p2.TableroSwing;
 import jade.core.AID;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 
 import dba_p2.Coordinates;
 
 public class MyJadeAgent extends Agent {
     private int x; // Posición X actual del agente en la matriz
     private int y; // Posición Y actual del agente en la matriz
+    private Deque<Coordinates> followedPath = new LinkedList<>();
     
     // nuevo
     private ArrayList<Coordinates> visitedCoordinates; // lista de visitados
@@ -105,7 +108,7 @@ public class MyJadeAgent extends Agent {
         Coordinates izquierda = new Coordinates(localCoordinate.x-1, localCoordinate.y);
         Coordinates derecha = new Coordinates(localCoordinate.x+1, localCoordinate.y);
         
-        /*
+        /* Debería funcionar, descomentar este y comentar el otro
         if(!visitedCoordinates.contains(arriba) && arriba.y >= 0){
             noVisitados.add(arriba);
         }
@@ -118,6 +121,22 @@ public class MyJadeAgent extends Agent {
         if(!visitedCoordinates.contains(derecha)){
             noVisitados.add(derecha);
         }*/
+        
+        
+        /* Para cuando podamos leer el mapa y saber si es un obstaculo o no
+        if(!visitedCoordinates.contains(arriba) && arriba.y >= 0 && mapa.get(arriba.y).get(arriba.x) != -1){
+            noVisitados.add(arriba);
+        }
+        if(!visitedCoordinates.contains(abajo) && abajo.y < mapa.length() && mapa.get(abajo.y).get(abajo.x) != -1){
+            noVisitados.add(abajo);
+        }
+        if(!visitedCoordinates.contains(izquierda) && izquierda.x >= 0 && mapa.get(izquierda.y).get(izquierda.x) != -1){
+            noVisitados.add(izquierda);
+        }
+        if(!visitedCoordinates.contains(derecha) && derecha.x < mapa.get(0).length() && mapa.get(derecha.y).get(derecha.x) != -1){
+            noVisitados.add(derecha);
+        }*/
+        
         
         if(!contieneCoordenada(arriba) && arriba.y >= 0){
             noVisitados.add(arriba);
@@ -145,6 +164,17 @@ public class MyJadeAgent extends Agent {
     
     private void mover(Coordinates coordenada){
         visitedCoordinates.add(localCoordinate);
+        //Si no podemos movernos a ningun sitio retrocedemos
+        /*
+        if (obtenerNoVisitados().size() == 0){
+            followedPath.pop();
+            coordenada = followedPath.element();
+        }
+        else{
+            followedPath.push(localCoordinate);
+        }
+        */
+        followedPath.push(coordenada);
         tablero.setAgentePosition(coordenada.x, coordenada.y);
         localCoordinate = coordenada;
         
