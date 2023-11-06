@@ -175,7 +175,6 @@ public class MyJadeAgent extends Agent {
             followedPath.push(localCoordinate);
         }
         
-        followedPath.push(coordenada);
         tablero.setAgentePosition(coordenada.x, coordenada.y);
         localCoordinate = coordenada;
         
