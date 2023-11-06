@@ -123,21 +123,21 @@ public class MyJadeAgent extends Agent {
         }*/
         
         
-        /* Para cuando podamos leer el mapa y saber si es un obstaculo o no
-        if(!visitedCoordinates.contains(arriba) && arriba.y >= 0 && mapa.get(arriba.y).get(arriba.x) != -1){
+        //Para saber si es un obstaculo o no, si no funciona comentar y descomentar el de abajo
+        if(!visitedCoordinates.contains(arriba) && arriba.y >= 0 && tablero.getMatriz()[arriba.y][arriba.x] != -1){
             noVisitados.add(arriba);
         }
-        if(!visitedCoordinates.contains(abajo) && abajo.y < mapa.length() && mapa.get(abajo.y).get(abajo.x) != -1){
+        if(!visitedCoordinates.contains(abajo) && abajo.y < tablero.getMatriz().length && tablero.getMatriz()[abajo.y][abajo.x] != -1){
             noVisitados.add(abajo);
         }
-        if(!visitedCoordinates.contains(izquierda) && izquierda.x >= 0 && mapa.get(izquierda.y).get(izquierda.x) != -1){
+        if(!visitedCoordinates.contains(izquierda) && izquierda.x >= 0 && tablero.getMatriz()[izquierda.y][izquierda.x] != -1){
             noVisitados.add(izquierda);
         }
-        if(!visitedCoordinates.contains(derecha) && derecha.x < mapa.get(0).length() && mapa.get(derecha.y).get(derecha.x) != -1){
+        if(!visitedCoordinates.contains(derecha) && derecha.x < tablero.getMatriz()[0].length && tablero.getMatriz()[derecha.y][derecha.x] != -1){
             noVisitados.add(derecha);
-        }*/
+        }
         
-        
+        /*
         if(!contieneCoordenada(arriba) && arriba.y >= 0){
             noVisitados.add(arriba);
         }
@@ -150,6 +150,7 @@ public class MyJadeAgent extends Agent {
         if(!contieneCoordenada(derecha)){
             noVisitados.add(derecha);
         }
+        */
         
         return noVisitados;
     }
@@ -165,7 +166,7 @@ public class MyJadeAgent extends Agent {
     private void mover(Coordinates coordenada){
         visitedCoordinates.add(localCoordinate);
         //Si no podemos movernos a ningun sitio retrocedemos
-        /*
+        
         if (obtenerNoVisitados().size() == 0){
             followedPath.pop();
             coordenada = followedPath.element();
@@ -173,7 +174,7 @@ public class MyJadeAgent extends Agent {
         else{
             followedPath.push(localCoordinate);
         }
-        */
+        
         followedPath.push(coordenada);
         tablero.setAgentePosition(coordenada.x, coordenada.y);
         localCoordinate = coordenada;
