@@ -16,7 +16,7 @@ public class Mapa {
     private String name = "Unnamed map";
     private int num_rows;
     private int num_columns;
-    private ArrayList<ArrayList<Integer>> map;
+    private ArrayList<ArrayList<Celda>> map;
 
     /**
      * <h2>Constructor por defecto</h2>
@@ -40,13 +40,13 @@ public class Mapa {
 
         this.num_rows = (num_rows >= 0 ? num_rows : 0);
         this.num_columns = (num_columns >= 0 ? num_columns : 0);
-        this.map = new ArrayList<ArrayList<Integer>>();
+        this.map = new ArrayList<ArrayList<Celda>>();
 
         // Generamos el mapa completamente vacio
         for (int i=0; i < num_rows; i++) {
-            ArrayList<Integer> row = new ArrayList<Integer>();
+            ArrayList<Celda> row = new ArrayList<Celda>();
             for (int j=0; j < num_columns; j++) {
-                row.add(j, 0);
+                row.add(j, Celda.VOID);
             }
             map.add(row);
         }
@@ -98,12 +98,12 @@ public class Mapa {
      * @param map ArrayList bidimensional de enteros del cual se generara el mapa
      * @see #Mapa(int[][])
      */
-    public Mapa(ArrayList<ArrayList<Integer>> map) {
+    public Mapa(ArrayList<ArrayList<Celda>> map) {
 
         this.num_rows = map.size();
         int max_cols = 0;
         for (int i=0; i < this.num_rows; i++) {
-            ArrayList<Integer> row = map.get(i);
+            ArrayList<Celda> row = map.get(i);
             int row_size = row.size();
             if (row_size > max_cols) {
                 max_cols = row_size;
@@ -133,7 +133,7 @@ public class Mapa {
      * @see #replaceUnwantedElements()
      * @see #adjustMapToDimensions()
      */
-    public Mapa(int num_rows, int num_columns, ArrayList<ArrayList<Integer>> map) {
+    public Mapa(int num_rows, int num_columns, ArrayList<ArrayList<Celda>> map) {
 
         this.num_rows = (num_rows >= 0 ? num_rows : 0);
         this.num_columns = (num_columns >= 0 ? num_columns : 0);
@@ -164,7 +164,7 @@ public class Mapa {
      * @param map ArrayList bidimensional de enteros del cual se generara el mapa
      * @see #Map(int, int, ArrayList)
      */
-    public Mapa(String name, int num_rows, int num_columns, ArrayList<ArrayList<Integer>> map) {
+    public Mapa(String name, int num_rows, int num_columns, ArrayList<ArrayList<Celda>> map) {
 
         this(num_rows, num_columns, map);
         this.name = name;
@@ -174,7 +174,7 @@ public class Mapa {
     /**
      * <h2>Metodo privado toArrayList</h2>
      * 
-     * Convierte un array 2D simple de enteros a un ArrayList 2D de Integer
+     * Convierte un array 2D simple de enteros a un ArrayList 2D de Celda
      * <p>
      * Usado por los constructores que usan como parametro 
      * arrays 2D primitivos (no ArrayList)
@@ -182,17 +182,30 @@ public class Mapa {
      * @param arr Array 2D simple a convertir
      * @return Array convertido a ArrayList bidimensional
      */
-    private ArrayList<ArrayList<Integer>> toArrayList(int[][] arr) {
-        ArrayList<ArrayList<Integer>> arr_list = new ArrayList<ArrayList<Integer>>();
+    private ArrayList<ArrayList<Celda>> toArrayList(int[][] arr) {
+        ArrayList<ArrayList<Celda>> final_array = new ArrayList<ArrayList<Celda>>();
         for (int i=0; i < arr.length; i++) {
             int[] old_row = arr[i];
-            ArrayList<Integer> new_row = new ArrayList<Integer>();
+            ArrayList<Celda> new_row = new ArrayList<Celda>();
             for (int j=0; j < old_row.length; j++) {
-                new_row.add(old_row[j]);
+                int old_element = old_row[j];
+                Celda new_element = null;
+                for (Celda c : Celda.values()) {
+                    if (new_element != null) {
+                        break;
+                    }
+                    if (c.value() == old_element) {
+                        new_element = c;
+                    }
+                }
+                if (new_element == null) {
+                    new_element = Celda.VOID;
+                }
+                new_row.add(new_element);
             } 
-            arr_list.add(new_row);
+            final_array.add(new_row);
         }
-        return arr_list;
+        return final_array;
     }
 
     /**
@@ -367,7 +380,7 @@ public class Mapa {
      * @return Si los parametros son correctos devolvera el elemento
      *         deseado
      */
-    public int getElement(int row, int column) 
+    public Celda getElement(int row, int column) 
     throws IndexOutOfBoundsException {
 
         try {
@@ -391,10 +404,10 @@ public class Mapa {
      * @throws IndexOutOfBoundsException
      * @throws InvalidAttributeValueException
      */
-    public void setElement(int element, int row, int column) 
+    public void setElement(Celda element, int row, int column) 
     throws IndexOutOfBoundsException, InvalidAttributeValueException {
 
-        if (element != 0 && element != -1) {
+        if (element != Celda.VOID && element != Celda.WALL) {
             throw new InvalidAttributeValueException("[x] Invalid element (" + element + ")");
         }
 
@@ -428,19 +441,19 @@ public class Mapa {
             map.remove(map.size()-1);
         }
         while (map.size() < num_rows) {
-            map.add(new ArrayList<Integer>());
+            map.add(new ArrayList<Celda>());
         }
 
         int max_cols = 0;
         for (int i=0; i < map.size(); i++) {
 
-            ArrayList<Integer> row = map.get(i);
+            ArrayList<Celda> row = map.get(i);
 
             while (row.size() > num_columns) {
                 row.remove(row.size()-1);
             }
             while (row.size() < num_columns) {
-                row.add(0);
+                row.add(Celda.VOID);
             }
 
             int row_size = row.size();
@@ -460,9 +473,9 @@ public class Mapa {
 
         for (int i=0; i < num_rows; i++) {
             for (int j=0; j < num_columns; j++) {
-                int element = this.getElement(i, j);
-                if (element != -1 && element != 0) {
-                    map.get(i).set(j, 0);
+                Celda element = this.getElement(i, j);
+                if (element != Celda.VOID && element != Celda.WALL) {
+                    map.get(i).set(j, Celda.VOID);
                 }
             }
         }
@@ -495,8 +508,9 @@ public class Mapa {
         
         for (int i=0; i < num_rows; i++) {
             for (int j=0; j < num_columns; j++) {
+                int element = map.get(i).get(j).value();
                 // Si leemos el ultimo elemento de la fila, hacemos un linebreak (\n)
-                str += map.get(i).get(j) + (j == num_columns - 1 ? "\n" : "\t");
+                str += element + (j == num_columns - 1 ? "\n" : "\t");
             }
         }
 
