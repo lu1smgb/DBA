@@ -29,4 +29,9 @@ public class Coordinates {
         Coordinates otroPunto = (Coordinates) obj;
         return x == otroPunto.x && y == otroPunto.y;
     }
+
+    @Override
+    public String toString() {
+        return "(" + this.x + ", " + this.y + ")";
+    }
 }
