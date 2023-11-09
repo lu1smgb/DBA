@@ -8,15 +8,18 @@ package dba_p2;
 public class Coordinates {
     int x;
     int y;
+    //int visitados;
     
     Coordinates(){
         x = 0;
         y = 0;
+    //    visitados = 0;
     }
     
     Coordinates(int x, int y){
         this.x = x;
         this.y = y;
+    //    visitados = 0;
     }
     @Override
     public boolean equals(Object obj) {

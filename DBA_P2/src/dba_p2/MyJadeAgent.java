@@ -104,6 +104,7 @@ public class MyJadeAgent extends Agent {
             noVisitados.add(derecha);
         }
         
+        
         /*
         if(!contieneCoordenada(arriba) && arriba.y >= 0){
             noVisitados.add(arriba);
@@ -138,9 +139,10 @@ public class MyJadeAgent extends Agent {
             for (int i = 0; i < noVisitados.size(); ++i){
                 aux = calculaHeuristica(noVisitados.get(i));
                 
-                if (aux <= minimo){
+                if (aux < minimo /*&& noVisitados.get(i).visitados <= vecesVisitadas*/){
                     minimo = aux;
                     indice_minimo = i;
+                    //vecesVisitadas = noVisitados.get(i).visitados;
                 }
             }
             proxima = noVisitados.get(indice_minimo);
@@ -154,7 +156,10 @@ public class MyJadeAgent extends Agent {
     }
     
     private void mover(Coordinates coordenada){
-        visitedCoordinates.add(localCoordinate);
+        if (!visitedCoordinates.contains(localCoordinate)){
+            visitedCoordinates.add(localCoordinate);
+        }
+        //visitedCoordinates.get(visitedCoordinates.size() - 1).visitados += 1;
         //Si no podemos movernos a ningun sitio retrocedemos
         
         if (obtenerNoVisitados().isEmpty()){
