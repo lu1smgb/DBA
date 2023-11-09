@@ -73,9 +73,11 @@ public class Entorno {
         for (int i=0; i < numFilas; i++) {
             for (int j=0; j < numColumnas; j++) {
                 itPosicion.x = j; itPosicion.y = i;
-                System.out.println(itPosicion + " == " + posicionAgente);
-                if (itPosicion == this.posicionAgente) {
+                if (itPosicion.equals(this.posicionAgente)) {
                     outputElement = "A";
+                }
+                else if (itPosicion.equals(this.posicionObjetivo)) {
+                    outputElement = "$";
                 }
                 else {
                     outputElement = String.valueOf(this.mapa.getElement(itPosicion).value());
