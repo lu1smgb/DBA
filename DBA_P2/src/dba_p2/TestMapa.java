@@ -10,11 +10,11 @@ public class TestMapa {
         int num_rows = 7;
         int num_cols = 5;
         // ***
-        // ArrayList<ArrayList<Integer>> datos = new ArrayList<ArrayList<Integer>>();
+        // ArrayList<ArrayList<Celda>> datos = new ArrayList<ArrayList<Celda>>();
         int datos[][] = new int[num_rows][num_cols];
         // ***
         for (int i=0; i < num_rows; i++) {
-            // ArrayList<Integer> row = new ArrayList<Integer>();
+            // ArrayList<Celda> row = new ArrayList<Celda>();
             for (int j=0; j < num_cols; j++) {
                 if (i != 0 && j != 0) {
                     datos[i][j] = -1;
