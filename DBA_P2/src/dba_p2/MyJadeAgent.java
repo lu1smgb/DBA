@@ -157,10 +157,18 @@ public class MyJadeAgent extends Agent {
     
     private Coordinates moverNoVisitados(ArrayList<Coordinates> noVisitados){
         Random random = new Random();
+        Coordinates proxima = new Coordinates();
+        int indiceMovimiento = 0; 
+        if (noVisitados.size() != 0){
+            indiceMovimiento = random.nextInt(noVisitados.size());
+            proxima = noVisitados.get(indiceMovimiento);
+        }
+        else if (visitedCoordinates.size() != 0){
+            Coordinates aux = new Coordinates(visitedCoordinates.get(visitedCoordinates.size() - 1).x, visitedCoordinates.get(visitedCoordinates.size() - 1).y);
+            proxima = aux;
+        }
         
-        int indiceMovimiento = random.nextInt(noVisitados.size());
-        
-        return noVisitados.get(indiceMovimiento);
+        return proxima;
     }
     
     private void mover(Coordinates coordenada){
@@ -168,11 +176,11 @@ public class MyJadeAgent extends Agent {
         //Si no podemos movernos a ningun sitio retrocedemos
         
         if (obtenerNoVisitados().size() == 0){
-            followedPath.pop();
             coordenada = followedPath.element();
+            followedPath.pop();
         }
         else{
-            if (!followedPath.contains(localCoordinate){
+            if (!followedPath.contains(localCoordinate)){
                 followedPath.push(localCoordinate);
             }
         }
