@@ -394,6 +394,29 @@ public class Mapa {
     }
 
     /**
+     * Obtiene el elemento en las coordenadas
+     * 
+     * @param coordinates Coordenadas del elemento a obtener
+     * @throws IndexOutOfBoundsException
+     * @return Si los parametros son correctos devolvera el elemento
+     *         deseado
+     */
+    public Celda getElement(Coordinates coordinates) 
+    throws IndexOutOfBoundsException {
+
+        int row = coordinates.y;
+        int column = coordinates.x;
+        try {
+            return map.get(row).get(column);
+        }
+        catch (IndexOutOfBoundsException e) {
+            throw new IndexOutOfBoundsException("[x] Tried to access element (" + row + ", " + column +
+                                                ") in map with (" + num_rows + ", " + num_columns + ") dimensions");
+        }
+        
+    }
+
+    /**
      * <h2>Metodo setElement</h2>
      * Cambia un elemento por otro especifico en el mapa
      * <p>
