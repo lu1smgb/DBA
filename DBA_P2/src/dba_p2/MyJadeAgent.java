@@ -127,8 +127,23 @@ public class MyJadeAgent extends Agent {
         Coordinates proxima = new Coordinates();
         int indiceMovimiento = 0; 
         if (!noVisitados.isEmpty()){
+            //movimiento random
+            /*
             indiceMovimiento = random.nextInt(noVisitados.size());
             proxima = noVisitados.get(indiceMovimiento);
+            */
+            double minimo = Double.MAX_VALUE;
+            double aux = 0;
+            int indice_minimo = 0;
+            for (int i = 0; i < noVisitados.size(); ++i){
+                aux = calculaHeuristica(noVisitados.get(i));
+                
+                if (aux <= minimo){
+                    minimo = aux;
+                    indice_minimo = i;
+                }
+            }
+            proxima = noVisitados.get(indice_minimo);
         }
         else if (!visitedCoordinates.isEmpty()){
             Coordinates aux = new Coordinates(visitedCoordinates.get(visitedCoordinates.size() - 1).x, visitedCoordinates.get(visitedCoordinates.size() - 1).y);
