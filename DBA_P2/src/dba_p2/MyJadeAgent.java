@@ -65,7 +65,7 @@ public class MyJadeAgent extends Agent {
                 for(int i = 0; i<visitedCoordinates.size(); i++){
                     System.out.println("(i="+i+") --> x=" + visitedCoordinates.get(i).x + ", y=" + visitedCoordinates.get(i).y);
                 }
-
+                
                 // Envia un mensaje a la interfaz gráfica con la nueva posición (opcional)
                 ACLMessage message = new ACLMessage(ACLMessage.INFORM);
                 message.setContent("Nueva posición del agente: " + localCoordinate.x + ", " + localCoordinate.y);
@@ -159,11 +159,11 @@ public class MyJadeAgent extends Agent {
         Random random = new Random();
         Coordinates proxima = new Coordinates();
         int indiceMovimiento = 0; 
-        if (noVisitados.size() != 0){
+        if (!noVisitados.isEmpty()){
             indiceMovimiento = random.nextInt(noVisitados.size());
             proxima = noVisitados.get(indiceMovimiento);
         }
-        else if (visitedCoordinates.size() != 0){
+        else if (!visitedCoordinates.isEmpty()){
             Coordinates aux = new Coordinates(visitedCoordinates.get(visitedCoordinates.size() - 1).x, visitedCoordinates.get(visitedCoordinates.size() - 1).y);
             proxima = aux;
         }
@@ -175,7 +175,7 @@ public class MyJadeAgent extends Agent {
         visitedCoordinates.add(localCoordinate);
         //Si no podemos movernos a ningun sitio retrocedemos
         
-        if (obtenerNoVisitados().size() == 0){
+        if (obtenerNoVisitados().isEmpty()){
             coordenada = followedPath.element();
             followedPath.pop();
         }
