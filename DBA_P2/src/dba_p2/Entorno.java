@@ -23,7 +23,7 @@ public class Entorno {
      */
     public boolean moverAgente(Movimiento movimiento) {
         Coordinates nuevasCoordenadas = this.posicionAgente;
-        boolean exito = false;
+        boolean puedeMoverse = false;
         switch (movimiento) {
             case ARRIBA:
                 nuevasCoordenadas.y -= 1;
@@ -42,12 +42,15 @@ public class Entorno {
         }
         try {
             Celda siguienteCelda = this.mapa.getElement(nuevasCoordenadas);
-            exito = siguienteCelda != Celda.WALL;
+            puedeMoverse = siguienteCelda != Celda.WALL;
+            if (puedeMoverse) {
+                this.posicionAgente = nuevasCoordenadas;
+            }
         }
         catch (IndexOutOfBoundsException e) {
             System.err.println("Movimiento invalido: fuera de limites");
         }
-        return exito;
+        return puedeMoverse;
     }
 
     public boolean objetivoCumplido() {
@@ -116,7 +119,7 @@ public class Entorno {
         try {
             Mapa m = new dba_p2.Mapa("Mi mapa", 10, 12, datos);
             Entorno e = new Entorno(m);
-            System.out.println(e);
+            System.out.println(e.mapa);
         } catch (Exception e) {
             throw e;
         }
