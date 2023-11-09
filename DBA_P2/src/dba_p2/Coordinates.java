@@ -26,10 +26,18 @@ public class Coordinates {
         if (this == obj) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
+        if (obj instanceof Coordinates) {
+            Coordinates otroPunto = (Coordinates) obj;
+            return x == otroPunto.x && y == otroPunto.y;
         }
-        Coordinates otroPunto = (Coordinates) obj;
-        return x == otroPunto.x && y == otroPunto.y;
+        return false;
     }
+
+    // public static void main(String args[]) {
+    //     Coordinates c1 = new Coordinates(1,3);
+    //     Coordinates c2 = new Coordinates(1,3);
+    //     Coordinates c3 = new Coordinates(1,6);
+    //     System.out.println(c1.equals(c2));
+    //     System.out.println(c1.equals(c3));
+    // }
 }
