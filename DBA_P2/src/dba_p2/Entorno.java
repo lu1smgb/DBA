@@ -26,6 +26,14 @@ public class Entorno {
         
     }
 
+    public int getNumFilas() {
+        return this.mapa.getNumberOfRows();
+    }
+
+    public int getNumColumnas() {
+        return this.mapa.getNumberOfCols();
+    }
+
     public Coordinates getPosicionAgente() {
         return this.posicionAgente;
     }
