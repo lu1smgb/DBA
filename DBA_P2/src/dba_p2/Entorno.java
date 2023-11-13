@@ -30,7 +30,7 @@ public class Entorno {
         return this.posicionAgente;
     }
 
-    public Coordinates getCoordenadas(Movimiento direccion) {
+    public Coordinates percibirDireccion(Movimiento direccion) {
         Coordinates coordenadas = this.posicionAgente;
         switch (direccion) {
             case ARRIBA:
