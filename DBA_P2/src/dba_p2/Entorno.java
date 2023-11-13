@@ -26,6 +26,14 @@ public class Entorno {
         
     }
 
+    public Coordinates getPosicionAgente() {
+        return this.posicionAgente;
+    }
+
+    public Coordinates getPosicionObjetivo() {
+        return this.posicionObjetivo;
+    }
+
     /**
      * 
      */
@@ -65,6 +73,10 @@ public class Entorno {
         return this.posicionAgente == this.posicionObjetivo;
     }
 
+    public Celda getElement(int x, int y) throws IndexOutOfBoundsException {
+        return this.mapa.getElement(y, x);
+    }
+
     @Override
     public String toString() {
         
@@ -77,7 +89,6 @@ public class Entorno {
 
         str += "Posicion del agente: " + this.posicionAgente + "\n";
         str += "Posicion del objetivo: " + this.posicionObjetivo + "\n";
-
 
         Coordinates itPosicion = new Coordinates(0, 0);
         String outputElement;
