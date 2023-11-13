@@ -30,37 +30,42 @@ public class Entorno {
         return this.posicionAgente;
     }
 
-    public Coordinates getPosicionObjetivo() {
-        return this.posicionObjetivo;
-    }
-
-    /**
-     * 
-     */
-    public boolean moverAgente(Movimiento movimiento) {
-        Coordinates nuevasCoordenadas = this.posicionAgente;
-        boolean puedeMoverse = false;
-        switch (movimiento) {
+    public Coordinates getCoordenadas(Movimiento direccion) {
+        Coordinates coordenadas = this.posicionAgente;
+        switch (direccion) {
             case ARRIBA:
-                nuevasCoordenadas.y -= 1;
+                coordenadas.y -= 1;
                 break;
             case ABAJO:
-                nuevasCoordenadas.y += 1;
+                coordenadas.y += 1;
                 break;
             case IZQUIERDA:
-                nuevasCoordenadas.x -= 1;
+                coordenadas.x -= 1;
                 break;
             case DERECHA:
-                nuevasCoordenadas.x += 1;
+                coordenadas.x += 1;
                 break;
             default:
                 break;
         }
+        return coordenadas;
+    }
+    
+    public Coordinates getPosicionObjetivo() {
+        return this.posicionObjetivo;
+    }
+
+    public boolean moverAgente(Movimiento movimiento) {
+        boolean puedeMoverse = false;
         try {
+            Coordinates nuevasCoordenadas = this.getCoordenadas(movimiento);
             Celda siguienteCelda = this.mapa.getElement(nuevasCoordenadas);
             puedeMoverse = siguienteCelda != Celda.WALL;
             if (puedeMoverse) {
                 this.posicionAgente = nuevasCoordenadas;
+            }
+            else {
+                System.err.println("Movimiento invalido: choca con muro " + movimiento);
             }
         }
         catch (IndexOutOfBoundsException e) {
@@ -75,6 +80,10 @@ public class Entorno {
 
     public Celda getElement(int x, int y) throws IndexOutOfBoundsException {
         return this.mapa.getElement(y, x);
+    }
+
+    public Celda getElement(Coordinates coordenadas) throws IndexOutOfBoundsException {
+        return this.mapa.getElement(coordenadas);
     }
 
     @Override
