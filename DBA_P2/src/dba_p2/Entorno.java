@@ -7,7 +7,6 @@ public class Entorno {
     private Mapa mapa;
     private Coordinates posicionAgente;
     private Coordinates posicionObjetivo;
-    private ArrayList<Coordinates> percepcion;
 
     Entorno() {
 
@@ -57,15 +56,14 @@ public class Entorno {
         return c.x >= 0 && c.x < this.mapa.getNumberOfCols() && c.y >= 0 && c.y < this.mapa.getNumberOfRows();
     }
 
-    public boolean moverAgente(Movimiento movimiento) {
+    public boolean setPosicionAgente(Coordinates nuevaPosicion) {
         System.out.println("--- INICIA MOVIMIENTO ---");
-        Coordinates nuevaPosicion = this.percepcion.get(movimiento.value());
         if (nuevaPosicion == null || this.getElement(nuevaPosicion) == Celda.WALL) {
-            System.out.println("Agente NO puede moverse " + movimiento + " " + this.posicionAgente + " -> " + nuevaPosicion);
+            System.out.println("Agente NO PUEDE moverse:\t " + this.posicionAgente + " -> " + nuevaPosicion);
             System.out.println("--- TERMINA MOVIMIENTO ---");
             return false;
         }
-        System.out.println("Agente se mueve " + movimiento + " " + this.posicionAgente + " -> " + nuevaPosicion);
+        System.out.println("Agente se mueve:\t " + this.posicionAgente + " -> " + nuevaPosicion);
         this.posicionAgente = nuevaPosicion;
         System.out.println("--- TERMINA MOVIMIENTO ---");
         return true;
