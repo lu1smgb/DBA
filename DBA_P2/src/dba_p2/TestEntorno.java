@@ -27,6 +27,11 @@ public class TestEntorno {
         try {
             Mapa m = new dba_p2.Mapa("Mi mapa", 10, 12, datos);
             Entorno e = new Entorno(m);
+            e.moverAgente(Movimiento.ABAJO);
+            e.moverAgente(Movimiento.DERECHA);
+            e.moverAgente(Movimiento.DERECHA);
+            e.moverAgente(Movimiento.DERECHA);
+            e.moverAgente(Movimiento.DERECHA);
             System.out.println(e);
         } catch (Exception e) {
             throw e;
