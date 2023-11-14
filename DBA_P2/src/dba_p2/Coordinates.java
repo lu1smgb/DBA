@@ -21,6 +21,12 @@ public class Coordinates {
         this.y = y;
     //    visitados = 0;
     }
+
+    Coordinates(Coordinates other) {
+        this.x = other.x;
+        this.y = other.y;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
