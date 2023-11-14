@@ -18,7 +18,6 @@ public class Entorno {
         this.mapa = mapa;
         this.posicionAgente = new Coordinates(0, 0);
         this.posicionObjetivo = new Coordinates(this.mapa.getNumberOfCols() - 1, this.mapa.getNumberOfRows() - 1);
-        percibir();
 
     }
 
@@ -27,7 +26,6 @@ public class Entorno {
         this.mapa = mapa;
         this.posicionAgente = posicionAgente;
         this.posicionObjetivo = posicionObjetivo;
-        percibir();
         
     }
 
@@ -59,51 +57,6 @@ public class Entorno {
         return c.x >= 0 && c.x < this.mapa.getNumberOfCols() && c.y >= 0 && c.y < this.mapa.getNumberOfRows();
     }
 
-    // TODO METODO DE AGENTE
-    public Coordinates percibirDireccion(Movimiento direccion) throws IndexOutOfBoundsException {
-        Coordinates coordenadas = new Coordinates(this.posicionAgente.x, this.posicionAgente.y);
-        switch (direccion) {
-            case ARRIBA:
-                coordenadas.y -= 1;
-                break;
-            case ABAJO:
-                coordenadas.y += 1;
-                break;
-            case IZQUIERDA:
-                coordenadas.x -= 1;
-                break;
-            case DERECHA:
-                coordenadas.x += 1;
-                break;
-            default:
-                break;
-        }
-        if (!this.coordenadasValidas(coordenadas)) {
-            throw new IndexOutOfBoundsException("Agente en " + this.posicionAgente + " percibe hacia " 
-                                                + direccion + " en " + coordenadas + ": fuera de limites");
-        }
-        System.out.println("Percibe " + direccion + " desde " + this.posicionAgente + " -> " + coordenadas);
-        return coordenadas;
-    }
-
-    // TODO METODO DE AGENTE
-    public void percibir() {
-        System.out.println("--- INICIA PERCEPCION ---");
-        ArrayList<Coordinates> nuevosNodos = new ArrayList<>(4);
-        for (Movimiento m : Movimiento.values()) {
-            try {
-                nuevosNodos.add(this.percibirDireccion(m));
-            }
-            catch (IndexOutOfBoundsException e) {
-                System.out.println("Percibe " + m + " desde " + this.posicionAgente + " -> FUERA DEL MAPA");
-                nuevosNodos.add(null);
-            }
-        }
-        this.percepcion = nuevosNodos;
-        System.out.println("--- TERMINA PERCEPCION ---");
-    }
-
-    // TODO METODO DE AGENTE
     public boolean moverAgente(Movimiento movimiento) {
         System.out.println("--- INICIA MOVIMIENTO ---");
         Coordinates nuevaPosicion = this.percepcion.get(movimiento.value());
@@ -115,7 +68,6 @@ public class Entorno {
         System.out.println("Agente se mueve " + movimiento + " " + this.posicionAgente + " -> " + nuevaPosicion);
         this.posicionAgente = nuevaPosicion;
         System.out.println("--- TERMINA MOVIMIENTO ---");
-        percibir();
         return true;
     }
 
