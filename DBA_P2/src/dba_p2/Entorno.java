@@ -66,7 +66,7 @@ public class Entorno {
     public boolean moverAgente(Movimiento movimiento) {
         boolean puedeMoverse = false;
         try {
-            Coordinates nuevasCoordenadas = this.getCoordenadas(movimiento);
+            Coordinates nuevasCoordenadas = this.percibirDireccion(movimiento);
             Celda siguienteCelda = this.mapa.getElement(nuevasCoordenadas);
             puedeMoverse = siguienteCelda != Celda.WALL;
             if (puedeMoverse) {
