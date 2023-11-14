@@ -114,8 +114,8 @@ public class Entorno {
         }
         System.out.println("Agente se mueve " + movimiento + " " + this.posicionAgente + " -> " + nuevaPosicion);
         this.posicionAgente = nuevaPosicion;
-        percibir();
         System.out.println("--- TERMINA MOVIMIENTO ---");
+        percibir();
         return true;
     }
 
