@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 
-import jade.core.AID;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -13,9 +12,7 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 import jade.core.Runtime;
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
-import jade.lang.acl.ACLMessage;
 
 public class NuevoAgente extends Agent {
     
@@ -135,7 +132,7 @@ public class NuevoAgente extends Agent {
         Coordinates posicionAnterior = this.entorno.getPosicionAgente();
         Coordinates nuevaPosicion = this.alrededores.get(movimiento.value());
 
-        boolean pudoMoverse = this.entorno.setPosicionAgente(nuevaPosicion);
+        boolean pudoMoverse = this.entorno.moverAgente(nuevaPosicion);
 
         if (pudoMoverse && !this.followedPath.contains(posicionAnterior)) {
             followedPath.add(posicionAnterior);
