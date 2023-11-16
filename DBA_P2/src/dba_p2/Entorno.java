@@ -54,7 +54,7 @@ public class Entorno {
         return c.x >= 0 && c.x < this.mapa.getNumberOfCols() && c.y >= 0 && c.y < this.mapa.getNumberOfRows();
     }
 
-    public boolean setPosicionAgente(Coordinates nuevaPosicion) {
+    public boolean moverAgente(Coordinates nuevaPosicion) {
         System.out.println("--- INICIA MOVIMIENTO ---");
         if (nuevaPosicion == null || this.getElement(nuevaPosicion) == Celda.WALL) {
             System.out.println("Agente NO PUEDE moverse:\t " + this.posicionAgente + " -> " + nuevaPosicion);
