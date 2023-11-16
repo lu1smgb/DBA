@@ -68,7 +68,7 @@ public class Entorno {
     }
 
     public boolean objetivoCumplido() {
-        return this.posicionAgente == this.posicionObjetivo;
+        return this.posicionAgente.equals(this.posicionObjetivo);
     }
 
     public Celda getElement(int x, int y) throws IndexOutOfBoundsException {
