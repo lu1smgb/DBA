@@ -117,6 +117,22 @@ public class Mapa {
 
     /**
      * <h2>Constructor</h2>
+     * Crea un mapa a partir de un nombre y un arraylist de celdas
+     * <p>
+     * 
+     * @param name Nombre del mapa
+     * @param map Array bidimensional de celdas del cual se generara el mapa
+     * @see #Mapa(ArrayList)
+     */
+    public Mapa(String name, ArrayList<ArrayList<Celda>> map) {
+
+        this(map);
+        this.name = name;
+
+    }
+
+    /**
+     * <h2>Constructor</h2>
      * Crea un mapa a partir de sus dimensiones y un array bidimensional de enteros
      * <p>
      * Cada elemento dentro del array representa una casilla del mapa
@@ -266,6 +282,27 @@ public class Mapa {
 
         adjustMapToDimensions();
         replaceUnwantedElements();
+
+    }
+
+    /**
+     * <h2>Constructor</h2>
+     * Crea un mapa a partir de un nombre y un array bidimensional de enteros
+     * <p>
+     * Cada elemento dentro del array representa una casilla del mapa
+     * <p>
+     * Se verificara que no se haya introducido un entero invalido
+     * en el array, en caso contrario, se sustituira por el entero que represente
+     * una casilla vacia.
+     * 
+     * @param name Nombre del mapa
+     * @param map Array bidimensional de enteros del cual se generara el mapa
+     * @see #Mapa(int[][])
+     */
+    public Mapa(String name, int[][] map) {
+
+        this(map);
+        this.name = name;
 
     }
 
