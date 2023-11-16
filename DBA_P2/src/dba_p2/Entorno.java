@@ -1,7 +1,5 @@
 package dba_p2;
 
-import java.util.ArrayList;
-
 public class Entorno {
 
     private Mapa mapa;
@@ -106,7 +104,17 @@ public class Entorno {
                     outputElement = "$";
                 }
                 else {
-                    outputElement = String.valueOf(this.mapa.getElement(itPosicion).value());
+                    int valorCelda = this.mapa.getElement(itPosicion).value();
+                    if (valorCelda == Celda.VOID.value()) {
+                        outputElement = "-";
+                    }
+                    else if (valorCelda == Celda.WALL.value()) {
+                        outputElement = "#";
+                    }
+                    else {
+                        outputElement = "?";
+                    }
+                    ////outputElement = String.valueOf(this.mapa.getElement(itPosicion).value());
                 }
                 // Si leemos el ultimo elemento de la fila, hacemos un linebreak (\n)
                 str += outputElement + (j == numColumnas - 1 ? "\n" : "\t");
