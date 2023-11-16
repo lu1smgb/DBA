@@ -76,7 +76,6 @@ public class NuevoAgente extends Agent {
         System.exit(0);
     }
     
-    // TODO METODO DE AGENTE
     public Coordinates percibirDireccion(Movimiento direccion) throws IndexOutOfBoundsException {
         Coordinates posicionAgente = this.entorno.getPosicionAgente();
         Coordinates coordenadas = new Coordinates(posicionAgente);
@@ -103,7 +102,6 @@ public class NuevoAgente extends Agent {
         return coordenadas;
     }
 
-    // TODO METODO DE AGENTE
     /**
      * Funcion usada para actualizar las percepciones/sensores del agente
      * Arriba, abajo, izquierda, derecha
@@ -126,7 +124,6 @@ public class NuevoAgente extends Agent {
         System.out.println("--- TERMINA PERCEPCION ---");
     }
 
-    // TODO: Pendiente de cambios
     public boolean moverse(Movimiento movimiento) {
 
         Coordinates posicionAnterior = this.entorno.getPosicionAgente();
