@@ -16,6 +16,11 @@ import java.util.LinkedList;
 import dba_p2.Coordinates;
 import jade.core.behaviours.OneShotBehaviour;
 
+import java.util.*;
+
+import java.util.function.Function;
+import java.util.function.BiFunction;
+
 public class MyJadeAgent extends Agent {
     private int x; // Posición X actual del agente en la matriz
     private int y; // Posición Y actual del agente en la matriz
@@ -42,7 +47,7 @@ public class MyJadeAgent extends Agent {
         // nuevo
         visitedCoordinates = new ArrayList<>();
         localCoordinate = new Coordinates();
-        objectiveCoordinate = new Coordinates(7, 6);
+        objectiveCoordinate = new Coordinates(0, 9);
         //visitedCoordinates.add(localCoordinate);
         //visitedCoordinates.add(localCoordinate);
         
@@ -50,7 +55,7 @@ public class MyJadeAgent extends Agent {
         //noVisitados = new ArrayList<>();
 
         // Inicializa la referencia a la interfaz gráfica
-        tablero = new TableroSwing(new int[][]{
+        /*tablero = new TableroSwing(new int[][]{
             {0, 0, 0, -1, 0, 0, 0},
             {0, 0, -1, 0, 0, -1, 0},
             {0, 0, 0, 0, 0, -1, 0},
@@ -59,7 +64,21 @@ public class MyJadeAgent extends Agent {
             {0, 0, -1, 0, 0, -1, 0},
             {0, 0, 0, 0, 0, -1, 0},
             {0, 0, 0, 0, 0, -1, 0}
+        });*/
+
+        tablero = new TableroSwing(new int[][]{
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, -1, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, -1, 0, 0, -1, 0, 0},
+            {0, 0, 0, 0, -1, 0, 0, -1, 0, 0},
+            {0, 0, 0, 0, -1, -1, -1, -1, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
         });
+
 
         // Comportamiento para manejar las actualizaciones de posición
         addBehaviour(new CyclicBehaviour(this) {
@@ -93,126 +112,6 @@ public class MyJadeAgent extends Agent {
                 }
             }
         });
-    }
-    
-    public class ObtenerNoVisitados extends OneShotBehaviour {
-        ArrayList<Coordinates> noVisitados;
-        
-        public ObtenerNoVisitados(){
-            this.noVisitados = new ArrayList<>();
-        }
-        
-        @Override
-        public void action() {
-            //ArrayList<Coordinates> noVisitados = new ArrayList<>();
-            Coordinates arriba = new Coordinates(localCoordinate.x, localCoordinate.y-1);
-            Coordinates abajo = new Coordinates(localCoordinate.x, localCoordinate.y+1);
-            Coordinates izquierda = new Coordinates(localCoordinate.x-1, localCoordinate.y);
-            Coordinates derecha = new Coordinates(localCoordinate.x+1, localCoordinate.y);
-
-            //Para saber si es un obstaculo o no, si no funciona comentar y descomentar el de abajo
-            if(!visitedCoordinates.contains(arriba) && arriba.y >= 0 && tablero.getMatriz()[arriba.y][arriba.x] != -1){
-                this.noVisitados.add(arriba);
-            }
-            if(!visitedCoordinates.contains(abajo) && abajo.y < tablero.getMatriz().length && tablero.getMatriz()[abajo.y][abajo.x] != -1){
-                this.noVisitados.add(abajo);
-            }
-            if(!visitedCoordinates.contains(izquierda) && izquierda.x >= 0 && tablero.getMatriz()[izquierda.y][izquierda.x] != -1){
-                this.noVisitados.add(izquierda);
-            }
-            if(!visitedCoordinates.contains(derecha) && derecha.x < tablero.getMatriz()[0].length && tablero.getMatriz()[derecha.y][derecha.x] != -1){
-                this.noVisitados.add(derecha);
-            }
-        }
-        
-        public int onEnd() {
-            addBehaviour(new MoverNoVisitados (this.noVisitados));
-            
-            return super.onEnd();
-        }
-        
-       
-    }
-    
-    public class MoverNoVisitados extends OneShotBehaviour {
-        ArrayList<Coordinates> noVisitados;
-        Coordinates coordenada;
-        public MoverNoVisitados(ArrayList<Coordinates> noVisitados){
-            this.noVisitados = noVisitados;
-        }
-        
-        @Override
-        public void action() {
-            Random random = new Random();
-            Coordinates proxima = new Coordinates();
-            int indiceMovimiento = 0; 
-            if (!this.noVisitados.isEmpty()){
-                //movimiento random
-                /*
-                indiceMovimiento = random.nextInt(noVisitados.size());
-                proxima = noVisitados.get(indiceMovimiento);
-                */
-                double minimo = Double.MAX_VALUE;
-                double aux = 0;
-                int indice_minimo = 0;
-                for (int i = 0; i < this.noVisitados.size(); ++i){
-                    aux = calculaHeuristica(this.noVisitados.get(i));
-
-                    if (aux < minimo /*&& noVisitados.get(i).visitados <= vecesVisitadas*/){
-                        minimo = aux;
-                        indice_minimo = i;
-                        //vecesVisitadas = noVisitados.get(i).visitados;
-                    }
-                }
-                proxima = this.noVisitados.get(indice_minimo);
-            }
-            else if (!visitedCoordinates.isEmpty()){
-                Coordinates aux = new Coordinates(visitedCoordinates.get(visitedCoordinates.size() - 1).x, visitedCoordinates.get(visitedCoordinates.size() - 1).y);
-                proxima = aux;
-            }
-
-            //return proxima;
-            
-            this.coordenada = proxima;
-        }
-        
-        public int onEnd() {
-            addBehaviour(new Movimiento (this.coordenada, this.noVisitados));
-            
-            return super.onEnd();
-        }
-    }
-    
-    public class Movimiento extends OneShotBehaviour {
-        Coordinates coordenada;
-        ArrayList<Coordinates> noVisitados;
-        
-        public Movimiento(Coordinates coordenada, ArrayList<Coordinates> noVisitados){
-            this.coordenada = coordenada;
-            this.noVisitados = noVisitados;
-        }
-        @Override
-        public void action() {
-            // coordenada es el parametro de entrada
-            if (!visitedCoordinates.contains(localCoordinate)){
-                visitedCoordinates.add(localCoordinate);
-            }
-            //visitedCoordinates.get(visitedCoordinates.size() - 1).visitados += 1;
-            //Si no podemos movernos a ningun sitio retrocedemos
-
-            if (noVisitados.isEmpty()){
-                this.coordenada = followedPath.element();
-                followedPath.pop();
-            }
-            else{
-                if (!followedPath.contains(localCoordinate)){
-                    followedPath.push(localCoordinate);
-                }
-            }
-
-            tablero.setAgentePosition(this.coordenada.x, this.coordenada.y);
-            localCoordinate = this.coordenada;
-        }
     }
     
     
@@ -314,6 +213,8 @@ public class MyJadeAgent extends Agent {
     }
     
     private double calculaHeuristica(Coordinates proxima){
-        return Math.sqrt(Math.pow((objectiveCoordinate.x - proxima.x), 2)+ Math.pow((objectiveCoordinate.y - proxima.y), 2));
+        //return Math.sqrt(Math.pow((objectiveCoordinate.x - proxima.x), 2)+ Math.pow((objectiveCoordinate.y - proxima.y), 2));
+        return Math.abs(objectiveCoordinate.x - proxima.x) + Math.abs(objectiveCoordinate.y - proxima.y);
     }
+    
 }
