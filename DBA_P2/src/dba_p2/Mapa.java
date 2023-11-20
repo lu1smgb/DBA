@@ -424,6 +424,22 @@ public class Mapa {
     }
 
     /**
+     * Determina si hay un tipo determinado de celda en las coordenadas especificadas
+     * 
+     * @param celda Tipo de celda
+     * @param coordinates Coordenadas
+     * @throws IndexOutOfBoundsException
+     * @return Si en las coordenadas especificadas se encuentra el tipo de celda especificada
+     * @see Celda
+     */
+    public boolean hayCeldaEnCoordenadas(Celda celda, Coordinates coordinates)
+    throws IndexOutOfBoundsException {
+
+        return this.getElement(coordinates) == celda;
+
+    }
+
+    /**
      * <h2>Metodo setElement</h2>
      * Cambia un elemento por otro especifico en el mapa
      * <p>
