@@ -14,6 +14,7 @@ public class ComportamientoAleatorio extends ComportamientoAgente {
         Random rng = new Random();
         int resultadoRng = rng.nextInt(Movimiento.values().length);
         Movimiento resultado = Movimiento.values()[resultadoRng];
+        System.out.println("Agente decide aleatoriamente: " + resultado);
         return resultado;
 
     }
