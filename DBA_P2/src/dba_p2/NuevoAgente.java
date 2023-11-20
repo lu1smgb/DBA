@@ -5,6 +5,8 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Random;
 
+import javax.management.InvalidAttributeValueException;
+
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -29,42 +31,6 @@ public class NuevoAgente extends Agent {
         percibir();
         this.followedPath = new LinkedList<Coordinates>();
         this.visitedCoordinates = new ArrayList<Coordinates>();
-
-        // Comportamiento de prueba
-        // usado para comprobar el estado del entorno
-        // this.addBehaviour(new OneShotBehaviour(this) {
-        //     public void action() {
-        //         System.out.println(entorno);
-        //     }
-        // });
-        // this.addBehaviour(new OneShotBehaviour(this) {
-        //     public void action() {
-        //         moverse(Movimiento.ABAJO);
-        //         moverse(Movimiento.ABAJO);
-        //         moverse(Movimiento.DERECHA);
-        //         moverse(Movimiento.DERECHA);
-        //         moverse(Movimiento.DERECHA);
-        //         moverse(Movimiento.DERECHA);
-        //         moverse(Movimiento.ARRIBA);
-        //         moverse(Movimiento.ARRIBA);
-        //         moverse(Movimiento.DERECHA);
-        //         moverse(Movimiento.DERECHA);
-        //         moverse(Movimiento.ABAJO);
-        //         moverse(Movimiento.ABAJO);
-        //         moverse(Movimiento.ABAJO);
-        //         moverse(Movimiento.ABAJO);
-        //         moverse(Movimiento.ABAJO);
-        //         moverse(Movimiento.ABAJO);
-        //         moverse(Movimiento.ABAJO);
-        //     }
-        // });
-        // this.addBehaviour(new OneShotBehaviour(this) {
-        //     public void action() {
-        //         System.out.println(entorno);
-        //         System.out.println("Agente ha llegado a destino: " + entorno.objetivoCumplido());
-        //         doDelete();
-        //     }
-        // });
 
         addBehaviour(new ComportamientoAleatorio(this));
         
@@ -100,9 +66,11 @@ public class NuevoAgente extends Agent {
                 break;
         }
         if (!this.entorno.coordenadasValidas(coordenadas)) {
-            throw new IndexOutOfBoundsException("Percibe " + direccion + " desde " + posicionAgente + " -> FUERA DEL MAPA");
+            throw new IndexOutOfBoundsException(
+                "Percibe " + direccion + " desde " + posicionAgente + " -> FUERA DEL MAPA");
         }
-        System.out.println("Percibe " + direccion + " desde " + posicionAgente + " -> " + coordenadas);
+        System.out.println(
+            "Percibe " + direccion + " desde " + posicionAgente + " -> " + coordenadas + " " + this.entorno.getElement(coordenadas));
         return coordenadas;
     }
 
@@ -170,7 +138,7 @@ public class NuevoAgente extends Agent {
             };
             Mapa mapa = new Mapa(mapaArray);
             mapa.setName("Mapa Prototipo");
-            Coordinates posicionAgente = new Coordinates(0, 0);
+            Coordinates posicionAgente = new Coordinates(6, 6);
             Coordinates posicionObjetivo = new Coordinates(mapa.getNumberOfCols() - 1, mapa.getNumberOfRows() - 1);
             Entorno entorno = new Entorno(mapa, posicionAgente, posicionObjetivo);
             AgentController ac = cc.createNewAgent("NuevoAgente", agentClassName, new Object[] {entorno});
@@ -178,6 +146,9 @@ public class NuevoAgente extends Agent {
         }
         catch (StaleProxyException e) {
             System.err.println("Error al crear el agente: StaleProxyException");
+        }
+        catch (InvalidAttributeValueException e) {
+            System.err.println("Error al crear el agente: parametros del entorno no validos");
         }
 
     }
