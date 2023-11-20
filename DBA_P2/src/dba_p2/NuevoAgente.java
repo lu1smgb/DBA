@@ -3,6 +3,7 @@ package dba_p2;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Random;
 
 import jade.core.Agent;
 import jade.core.Profile;
@@ -12,6 +13,7 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 import jade.core.Runtime;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 
 public class NuevoAgente extends Agent {
@@ -30,44 +32,46 @@ public class NuevoAgente extends Agent {
 
         // Comportamiento de prueba
         // usado para comprobar el estado del entorno
-        this.addBehaviour(new OneShotBehaviour(this) {
-            public void action() {
-                System.out.println(entorno);
-                ////doDelete();
-            }
-        });
+        // this.addBehaviour(new OneShotBehaviour(this) {
+        //     public void action() {
+        //         System.out.println(entorno);
+        //     }
+        // });
+        // this.addBehaviour(new OneShotBehaviour(this) {
+        //     public void action() {
+        //         moverse(Movimiento.ABAJO);
+        //         moverse(Movimiento.ABAJO);
+        //         moverse(Movimiento.DERECHA);
+        //         moverse(Movimiento.DERECHA);
+        //         moverse(Movimiento.DERECHA);
+        //         moverse(Movimiento.DERECHA);
+        //         moverse(Movimiento.ARRIBA);
+        //         moverse(Movimiento.ARRIBA);
+        //         moverse(Movimiento.DERECHA);
+        //         moverse(Movimiento.DERECHA);
+        //         moverse(Movimiento.ABAJO);
+        //         moverse(Movimiento.ABAJO);
+        //         moverse(Movimiento.ABAJO);
+        //         moverse(Movimiento.ABAJO);
+        //         moverse(Movimiento.ABAJO);
+        //         moverse(Movimiento.ABAJO);
+        //         moverse(Movimiento.ABAJO);
+        //     }
+        // });
+        // this.addBehaviour(new OneShotBehaviour(this) {
+        //     public void action() {
+        //         System.out.println(entorno);
+        //         System.out.println("Agente ha llegado a destino: " + entorno.objetivoCumplido());
+        //         doDelete();
+        //     }
+        // });
 
-        this.addBehaviour(new OneShotBehaviour(this) {
-            public void action() {
-                moverse(Movimiento.ABAJO);
-                moverse(Movimiento.ABAJO);
-                moverse(Movimiento.DERECHA);
-                moverse(Movimiento.DERECHA);
-                moverse(Movimiento.DERECHA);
-                moverse(Movimiento.DERECHA);
-                moverse(Movimiento.ARRIBA);
-                moverse(Movimiento.ARRIBA);
-                moverse(Movimiento.DERECHA);
-                moverse(Movimiento.DERECHA);
-                moverse(Movimiento.ABAJO);
-                moverse(Movimiento.ABAJO);
-                moverse(Movimiento.ABAJO);
-                moverse(Movimiento.ABAJO);
-                moverse(Movimiento.ABAJO);
-                moverse(Movimiento.ABAJO);
-                moverse(Movimiento.ABAJO);
+        addBehaviour(new ComportamientoAleatorio(this));
+        
+    }
 
-            }
-        });
-        
-        this.addBehaviour(new OneShotBehaviour(this) {
-            public void action() {
-                System.out.println(entorno);
-                System.out.println("Agente ha llegado a destino: " + entorno.objetivoCumplido());
-                doDelete();
-            }
-        });
-        
+    public Entorno getEntorno() {
+        return this.entorno;
     }
 
     @Override
