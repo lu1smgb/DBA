@@ -1,5 +1,7 @@
 package dba_p2;
 
+import javax.management.InvalidAttributeValueException;
+
 public class Entorno {
 
     private Mapa mapa;
@@ -10,20 +12,81 @@ public class Entorno {
 
     }
 
-    Entorno(Mapa mapa) {
-
+    Entorno(Mapa mapa, Coordinates posicionAgente, Coordinates posicionObjetivo) 
+    throws InvalidAttributeValueException {
+        
         this.mapa = mapa;
-        this.posicionAgente = new Coordinates(0, 0);
-        this.posicionObjetivo = new Coordinates(this.mapa.getNumberOfCols() - 1, this.mapa.getNumberOfRows() - 1);
 
+        boolean posicionAgenteValido = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, posicionAgente);
+        boolean posicionObjetivoValida = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, posicionObjetivo);
+
+        // Si la posicion proporcionada no es valida, intentaremos encontrar una nueva
+        // La busqueda se hara de columna a columna, de izquierda a derecha
+        if (!posicionAgenteValido) {
+
+            Coordinates nuevaPosicionAgente = new Coordinates(0, 0);
+            posicionAgenteValido = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, nuevaPosicionAgente);
+
+            while (!posicionAgenteValido) {
+                if (nuevaPosicionAgente.y < getNumFilas() - 1) {
+                    nuevaPosicionAgente.y++;
+                }
+                else if (nuevaPosicionAgente.y >= getNumFilas() - 1) {
+                    if (nuevaPosicionAgente.x < getNumColumnas() - 1) {
+                        nuevaPosicionAgente.x++;
+                    }
+                    else if (nuevaPosicionAgente.x >= getNumColumnas() - 1) {
+                        throw new InvalidAttributeValueException(
+                            "La posicion del agente es invalida y no se ha podido encontrar una posicion valida");
+                    }
+                }
+                posicionAgenteValido = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, nuevaPosicionAgente);
+            }
+
+            this.posicionAgente = nuevaPosicionAgente;
+
+        }
+        else {
+            this.posicionAgente = posicionAgente;
+        }
+
+        // Lo mismo que antes, pero para la posicion del objetivo
+        // La busqueda se hara de fila a fila, de abajo a arriba
+        if (!posicionObjetivoValida) {
+
+            Coordinates nuevaPosicionObjetivo = new Coordinates(getNumColumnas() - 1, getNumFilas() - 1);
+            posicionObjetivoValida = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, nuevaPosicionObjetivo);
+
+            while (!posicionObjetivoValida) {
+                if (nuevaPosicionObjetivo.x > 0) {
+                    nuevaPosicionObjetivo.x--;
+                }
+                else if (nuevaPosicionObjetivo.x <= 0) {
+                    if (nuevaPosicionObjetivo.y > 0) {
+                        nuevaPosicionObjetivo.y--;
+                    }
+                    else if (nuevaPosicionObjetivo.y <= 0) {
+                        throw new InvalidAttributeValueException(
+                            "La posicion del objetivo es invalida y no se ha podido encontrar una posicion valida");
+                    }
+                }
+                posicionObjetivoValida = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, nuevaPosicionObjetivo);
+            }
+
+            this.posicionAgente = nuevaPosicionObjetivo;
+
+        }
+        else {
+            this.posicionObjetivo = posicionObjetivo;
+        }
+        
     }
 
-    Entorno(Mapa mapa, Coordinates posicionAgente, Coordinates posicionObjetivo) {
-        
-        this.mapa = mapa;
-        this.posicionAgente = posicionAgente;
-        this.posicionObjetivo = posicionObjetivo;
-        
+    Entorno(Mapa mapa) 
+    throws InvalidAttributeValueException {
+
+        this(mapa, new Coordinates(0, 0), new Coordinates(mapa.getNumberOfCols() - 1, mapa.getNumberOfRows() - 1));
+
     }
 
     public String getNombre() {
@@ -104,11 +167,10 @@ public class Entorno {
                     outputElement = "$";
                 }
                 else {
-                    int valorCelda = this.mapa.getElement(itPosicion).value();
-                    if (valorCelda == Celda.VOID.value()) {
+                    if (this.mapa.hayCeldaEnCoordenadas(Celda.VOID, itPosicion)) {
                         outputElement = "-";
                     }
-                    else if (valorCelda == Celda.WALL.value()) {
+                    else if (this.mapa.hayCeldaEnCoordenadas(Celda.WALL, itPosicion)) {
                         outputElement = "#";
                     }
                     else {
