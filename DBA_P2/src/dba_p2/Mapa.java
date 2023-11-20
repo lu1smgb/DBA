@@ -368,21 +368,6 @@ public class Mapa {
     }
 
     /**
-     * <h2>Setter {@link #num_rows}</h2>
-     * 
-     * {@link #num_rows} tendra que ser mayor o igual que 0, en caso contrario
-     * este metodo no realizara ninguna operacion
-     * 
-     * @param num_rows Nuevo numero de filas del mapa
-     */
-    public void setNumberOfRows(int num_rows) {
-        
-        this.num_rows = (num_rows >= 0 ? num_rows : 0);
-        adjustMapToDimensions();
-
-    }
-
-    /**
      * <h2>Getter {@link #num_columns}</h2>
      * 
      * @return Numero de columnas del mapa
@@ -390,21 +375,6 @@ public class Mapa {
     public int getNumberOfCols() {
 
         return num_columns;
-
-    }
-
-    /**
-     * <h2>Setter {@link #num_columns}</h2>
-     * 
-     * {@link #num_columns} tendra que ser mayor o igual que 0, en caso contrario
-     * este metodo no realizara ninguna operacion
-     * 
-     * @param num_columns Nuevo numero de columnas del mapa
-     */
-    public void setNumberOfColumns(int num_columns) {
-
-        this.num_columns = (num_columns >= 0 ? num_columns : 0);
-        adjustMapToDimensions();
 
     }
 
