@@ -12,28 +12,34 @@ public abstract class ComportamientoAgente extends CyclicBehaviour {
 
     protected abstract Movimiento decidirMovimiento();
 
+    private void espera(int ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void action() {
 
         Entorno entorno = this.agente.getEntorno();
+        System.out.println(entorno);
 
-        if (!entorno.objetivoCumplido()) {
+        if (entorno.objetivoCumplido()) {
+            System.out.println("!!!!! OBJETIVO CUMPLIDO !!!!!");
+            espera(3000);
+            this.agente.doDelete();
+        }
+        else {
             Movimiento decision = this.decidirMovimiento();
             this.agente.moverse(decision);
-            System.out.println(entorno);
-        }
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            espera(500);
         }
 
     }
 
     public void onTick() {
-        if (this.agente.getEntorno().objetivoCumplido()) {
-            agente.doDelete();
-        }
+        
     }
 
 }
