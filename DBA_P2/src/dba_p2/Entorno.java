@@ -186,7 +186,7 @@ public class Entorno {
      */
     public boolean moverAgente(Coordinates nuevaPosicion) {
         System.out.println("--- INICIA MOVIMIENTO ---");
-        if (nuevaPosicion == null || this.getElement(nuevaPosicion) == Celda.WALL) {
+        if (nuevaPosicion == null || this.mapa.hayCeldaEnCoordenadas(Celda.WALL, nuevaPosicion)) {
             System.out.println("Agente NO PUEDE moverse:\t " + this.posicionAgente + " -> " + nuevaPosicion);
             System.out.println("--- TERMINA MOVIMIENTO ---");
             return false;
