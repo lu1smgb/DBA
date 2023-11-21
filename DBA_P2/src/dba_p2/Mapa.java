@@ -413,13 +413,7 @@ public class Mapa {
 
         int row = coordinates.y;
         int column = coordinates.x;
-        try {
-            return map.get(row).get(column);
-        }
-        catch (IndexOutOfBoundsException e) {
-            throw new IndexOutOfBoundsException("[x] Tried to access element (" + row + ", " + column +
-                                                ") in map with (" + num_rows + ", " + num_columns + ") dimensions");
-        }
+        return this.getElement(row, column);
         
     }
 
