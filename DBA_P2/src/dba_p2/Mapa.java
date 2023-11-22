@@ -6,8 +6,6 @@ import javax.management.InvalidAttributeValueException;
 
 import java.lang.String;
 
-// TODO: Declarar una enum para los tipos de elementos???
-
 /**
  * Clase para almacenar informacion de un mapa
  */
