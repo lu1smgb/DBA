@@ -3,11 +3,11 @@ package dba_p2;
 import jade.core.behaviours.CyclicBehaviour;
 
 public abstract class ComportamientoAgente extends CyclicBehaviour {
-    
-    private NuevoAgente agente;
+
+    protected NuevoAgente agente;
 
     ComportamientoAgente(NuevoAgente agente) {
-        this.agente = (NuevoAgente) agente;
+        this.myAgent = this.agente = agente;
     }
 
     protected abstract Movimiento decidirMovimiento();
@@ -36,10 +36,6 @@ public abstract class ComportamientoAgente extends CyclicBehaviour {
             espera(500);
         }
 
-    }
-
-    public void onTick() {
-        
     }
 
 }
