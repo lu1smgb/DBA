@@ -44,7 +44,16 @@ public class ComportamientoManhattan extends ComportamientoAgente {
         ////Random random = new Random();
         Movimiento proxima = null;
         ////int indiceMovimiento = 0;
-        if (!noVisitados.isEmpty()) {
+        
+        boolean vacio = true;
+        
+        for (int i = 0; i< noVisitados.size(); ++i){
+            if (noVisitados.get(i) != null){
+                vacio = false;
+                break;
+            }
+        }
+        if (!vacio) {
             double minimo = Double.MAX_VALUE;
             double aux = 0;
             Movimiento movimiento_minimo = null;
@@ -61,7 +70,7 @@ public class ComportamientoManhattan extends ComportamientoAgente {
             proxima = movimiento_minimo;
         } 
         else if (!visitedCoordinates.isEmpty()) {
-            switch (followedPathMovimientos.getLast()) {
+            switch (followedPathMovimientos.element()) {
                 case IZQUIERDA:
                     proxima = Movimiento.DERECHA;
                     break;

@@ -16,7 +16,6 @@ public class NuevoAgente extends Agent {
     
     private Entorno entorno;
     private ArrayList<Coordinates> alrededores;
-    private ComportamientoManhattan manhattan;
 
     /**
      * <h2>Setup</h2>
@@ -33,10 +32,9 @@ public class NuevoAgente extends Agent {
     protected void setup() {
         this.entorno = (Entorno) this.getArguments()[0];
         this.alrededores = percibir();
-        this.manhattan = new ComportamientoManhattan(this);
 
         //addBehaviour(new ComportamientoAleatorio(this));
-        addBehaviour(this.manhattan);
+        addBehaviour(new ComportamientoManhattan(this));
     }
 
     /**
@@ -150,22 +148,10 @@ public class NuevoAgente extends Agent {
      */
     public boolean moverse(Movimiento movimiento) {
 
-        Coordinates nuevaPosicion;
-        
-        boolean pudoMoverse = false;
-        
-        if (movimiento != null){
-            nuevaPosicion = this.alrededores.get(movimiento.value());
+        Coordinates nuevaPosicion = this.alrededores.get(movimiento.value());
 
-            pudoMoverse = this.entorno.moverAgente(nuevaPosicion);
-    
-        }
-        else{
-            nuevaPosicion = this.manhattan.followedPath.getFirst();
-            pudoMoverse = this.entorno.moverAgente(nuevaPosicion);
-            this.manhattan.followedPath.pop();
-        }
-        
+        boolean pudoMoverse = this.entorno.moverAgente(nuevaPosicion);
+
         // Una vez se mueve tiene que actualizar su percepcion/sensores
         this.alrededores = percibir();
         return pudoMoverse;
@@ -196,6 +182,7 @@ public class NuevoAgente extends Agent {
                 { 0, 0, 0, 0, 0, -1, 0, 0, 0, 0 },
                 { 0, 0, 0, 0, 0, -1, 0, 0, 0, 0 },
                 { 0, 0, 0, 0, 0, -1, -1, -1, -1, 0 }
+
             };
             Mapa mapa = new Mapa(mapaArray);
             mapa.setName("Mapa Prototipo");
