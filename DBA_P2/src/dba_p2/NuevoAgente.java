@@ -16,6 +16,7 @@ public class NuevoAgente extends Agent {
     
     private Entorno entorno;
     private ArrayList<Coordinates> alrededores;
+    private ComportamientoManhattan manhattan;
 
     /**
      * <h2>Setup</h2>
@@ -32,9 +33,10 @@ public class NuevoAgente extends Agent {
     protected void setup() {
         this.entorno = (Entorno) this.getArguments()[0];
         this.alrededores = percibir();
+        this.manhattan = new ComportamientoManhattan(this);
 
-        addBehaviour(new ComportamientoAleatorio(this));
-        
+        //addBehaviour(new ComportamientoAleatorio(this));
+        addBehaviour(this.manhattan);
     }
 
     /**
@@ -148,10 +150,22 @@ public class NuevoAgente extends Agent {
      */
     public boolean moverse(Movimiento movimiento) {
 
-        Coordinates nuevaPosicion = this.alrededores.get(movimiento.value());
+        Coordinates nuevaPosicion;
+        
+        boolean pudoMoverse = false;
+        
+        if (movimiento != null){
+            nuevaPosicion = this.alrededores.get(movimiento.value());
 
-        boolean pudoMoverse = this.entorno.moverAgente(nuevaPosicion);
-
+            pudoMoverse = this.entorno.moverAgente(nuevaPosicion);
+    
+        }
+        else{
+            nuevaPosicion = this.manhattan.followedPath.getFirst();
+            pudoMoverse = this.entorno.moverAgente(nuevaPosicion);
+            this.manhattan.followedPath.pop();
+        }
+        
         // Una vez se mueve tiene que actualizar su percepcion/sensores
         this.alrededores = percibir();
         return pudoMoverse;
@@ -163,7 +177,7 @@ public class NuevoAgente extends Agent {
         Runtime rt = Runtime.instance();
 
         Profile p = new ProfileImpl();
-        p.setParameter(Profile.MAIN_HOST, "172.19.0.1");
+        p.setParameter(Profile.MAIN_HOST, "localhost");
         p.setParameter(Profile.CONTAINER_NAME, "Practica 2 DBA - Grupo 304");
 
         ContainerController cc = rt.createAgentContainer(p);
@@ -172,19 +186,21 @@ public class NuevoAgente extends Agent {
         
         try {
             int mapaArray[][] = {
-                { 0,  0,  0, -1,  0,  0,  0 },
-                { 0,  0, -1,  0,  0, -1,  0 },
-                { 0,  0,  0,  0,  0, -1,  0 },
-                { 0,  0,  0,  0,  0, -1,  0 },
-                { 0,  0,  0, -1,  0, -1,  0 },
-                { 0,  0, -1,  0,  0, -1,  0 },
-                { 0,  0,  0,  0,  0, -1,  0 },
-                { 0,  0,  0,  0,  0, -1,  0 }
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, -1, -1, -1, -1, 0 },
+                { 0, 0, 0, 0, 0, -1, 0, 0, -1, 0 },
+                { 0, 0, 0, 0, 0, -1, 0, 0, -1, 0 },
+                { 0, 0, 0, 0, 0, -1, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, -1, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, -1, -1, -1, -1, 0 }
             };
             Mapa mapa = new Mapa(mapaArray);
             mapa.setName("Mapa Prototipo");
-            Coordinates posicionAgente = new Coordinates(6, 6);
-            Coordinates posicionObjetivo = new Coordinates(mapa.getNumberOfCols() - 1, mapa.getNumberOfRows() - 1);
+            Coordinates posicionAgente = new Coordinates(0, 0);
+            Coordinates posicionObjetivo = new Coordinates(6, 6);
             Entorno entorno = new Entorno(mapa, posicionAgente, posicionObjetivo);
             AgentController ac = cc.createNewAgent("NuevoAgente", agentClassName, new Object[] {entorno});
             ac.start();
