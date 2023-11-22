@@ -25,6 +25,17 @@ public class NuevoAgente extends Agent {
     private Deque<Coordinates> followedPath;
     private ArrayList<Coordinates> visitedCoordinates;
 
+    /**
+     * <h2>Setup</h2>
+     * 
+     * El agente inicializa el entorno, una vez inicializado, 
+     * realiza una percepcion inicial de este
+     * <p>
+     * Despues se inicializan las estructuras de datos que sean necesarias
+     * para la implementacion de los comportamientos que vaya a seguir
+     * 
+     * Finalmente se agregan los comportamientos
+     */
     @Override
     protected void setup() {
         this.entorno = (Entorno) this.getArguments()[0];
@@ -36,16 +47,38 @@ public class NuevoAgente extends Agent {
         
     }
 
+    /**
+     * <h2>Getter entorno</h2>
+     * Necesario para que los comportamientos puedan acceder al entorno del agente
+     * @return El entorno del agente
+     */
     public Entorno getEntorno() {
         return this.entorno;
     }
 
+    /**
+     * <h2>takeDown</h2>
+     * Funcion a ejecutar por el agente una vez se haya indicado su finalizacion
+     */
     @Override
     protected void takeDown() {
         System.out.println("Terminando agente...");
         System.exit(0);
     }
     
+    /**
+     * <h2>Metodo percibirDireccion</h2>
+     * 
+     * El agente percibe unas coordenadas segun la direccion especificada
+     * <p>
+     * Lanzara una excepcion si las coordenadas no se encuentran dentro de los limites
+     * del entorno
+     * 
+     * @param direccion Direccion en la que el agente va a percibir
+     * @return Coordenadas percibidas, si la direccion apunta dentro del entorno
+     * @throws IndexOutOfBoundsException Si la direccion apunta fuera del entorno
+     * @see {@link #percibir()}
+     */
     public Coordinates percibirDireccion(Movimiento direccion) throws IndexOutOfBoundsException {
         Coordinates posicionAgente = this.entorno.getPosicionAgente();
         Coordinates coordenadas = new Coordinates(posicionAgente);
@@ -75,8 +108,18 @@ public class NuevoAgente extends Agent {
     }
 
     /**
-     * Funcion usada para actualizar las percepciones/sensores del agente
-     * Arriba, abajo, izquierda, derecha
+     * <h2>Metodo percibir</h2>
+     * 
+     * Metodo de percepcion usado por el agente
+     * <p>
+     * Percibe en las 4 direcciones: arriba, abajo, izquierda y derecha
+     * <p>
+     * Para cada direccion:
+     * <p>
+     * Obtiene una coordenada si la misma se encuentra dentro de los limites del mapa.
+     * En caso contrario, obtiene un valor nulo
+     * <p>
+     * Las percepciones del agente se guardan en {@link #alrededores} y se van sobreescribiendo con futuras llamadas
      */
     public void percibir() {
         System.out.println("--- INICIA PERCEPCION ---");
@@ -96,6 +139,13 @@ public class NuevoAgente extends Agent {
         System.out.println("--- TERMINA PERCEPCION ---");
     }
 
+    /**
+     * <h2>Metodo moverse</h2>
+     * Metodo usado por el agente para moverse en una direccion
+     * Para ello usa la coordenada de la percepcion correspondiente a la direccion especificada
+     * @param movimiento Direccion en la que desea moverse el agente
+     * @return Si el agente ha podido moverse
+     */
     public boolean moverse(Movimiento movimiento) {
 
         Coordinates posicionAnterior = this.entorno.getPosicionAgente();
