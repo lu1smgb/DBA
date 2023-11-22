@@ -1,10 +1,6 @@
 package dba_p2;
 
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Random;
-
 import javax.management.InvalidAttributeValueException;
 
 import jade.core.Agent;
@@ -15,15 +11,11 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 import jade.core.Runtime;
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
 
 public class NuevoAgente extends Agent {
     
     private Entorno entorno;
     private ArrayList<Coordinates> alrededores;
-    private Deque<Coordinates> followedPath;
-    private ArrayList<Coordinates> visitedCoordinates;
 
     /**
      * <h2>Setup</h2>
@@ -39,9 +31,7 @@ public class NuevoAgente extends Agent {
     @Override
     protected void setup() {
         this.entorno = (Entorno) this.getArguments()[0];
-        percibir();
-        this.followedPath = new LinkedList<Coordinates>();
-        this.visitedCoordinates = new ArrayList<Coordinates>();
+        this.alrededores = percibir();
 
         addBehaviour(new ComportamientoAleatorio(this));
         
@@ -120,8 +110,9 @@ public class NuevoAgente extends Agent {
      * En caso contrario, obtiene un valor nulo
      * <p>
      * Las percepciones del agente se guardan en {@link #alrededores} y se van sobreescribiendo con futuras llamadas
+     * @return Coordenadas percibidas por el agente
      */
-    public void percibir() {
+    public ArrayList<Coordinates> percibir() {
         System.out.println("--- INICIA PERCEPCION ---");
         int numeroSensores = Movimiento.values().length;
         ArrayList<Coordinates> alrededores = new ArrayList<>(numeroSensores);
@@ -134,9 +125,9 @@ public class NuevoAgente extends Agent {
                 alrededores.add(null);
             }
         }
-        this.alrededores = alrededores;
-        System.out.println(this.alrededores);
+        System.out.println(alrededores);
         System.out.println("--- TERMINA PERCEPCION ---");
+        return alrededores;
     }
 
     /**
@@ -148,17 +139,12 @@ public class NuevoAgente extends Agent {
      */
     public boolean moverse(Movimiento movimiento) {
 
-        Coordinates posicionAnterior = this.entorno.getPosicionAgente();
         Coordinates nuevaPosicion = this.alrededores.get(movimiento.value());
 
         boolean pudoMoverse = this.entorno.moverAgente(nuevaPosicion);
 
-        if (pudoMoverse && !this.followedPath.contains(posicionAnterior)) {
-            followedPath.add(posicionAnterior);
-        }
-
         // Una vez se mueve tiene que actualizar su percepcion/sensores
-        percibir();
+        this.alrededores = percibir();
         return pudoMoverse;
 
     }
