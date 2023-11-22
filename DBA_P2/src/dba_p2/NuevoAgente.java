@@ -47,6 +47,15 @@ public class NuevoAgente extends Agent {
     }
 
     /**
+     * <h2>Getter alrededores</h2>
+     * Necesario para que los comportamientos puedan acceder a la percepcion del agente
+     * @return La percepcion del agente
+     */
+    public final ArrayList<Coordinates> getPercepcion() {
+        return this.alrededores;
+    }
+
+    /**
      * <h2>takeDown</h2>
      * Funcion a ejecutar por el agente una vez se haya indicado su finalizacion
      */
