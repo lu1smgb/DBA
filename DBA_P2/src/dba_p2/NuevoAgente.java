@@ -33,7 +33,7 @@ public class NuevoAgente extends Agent {
         this.entorno = (Entorno) this.getArguments()[0];
         this.alrededores = percibir();
 
-        addBehaviour(new ComportamientoAleatorio(this));
+        addBehaviour(new ComportamientoManhattan(this));
         
     }
 
@@ -183,7 +183,7 @@ public class NuevoAgente extends Agent {
             };
             Mapa mapa = new Mapa(mapaArray);
             mapa.setName("Mapa Prototipo");
-            Coordinates posicionAgente = new Coordinates(6, 6);
+            Coordinates posicionAgente = new Coordinates(0, 0);
             Coordinates posicionObjetivo = new Coordinates(mapa.getNumberOfCols() - 1, mapa.getNumberOfRows() - 1);
             Entorno entorno = new Entorno(mapa, posicionAgente, posicionObjetivo);
             AgentController ac = cc.createNewAgent("NuevoAgente", agentClassName, new Object[] {entorno});
