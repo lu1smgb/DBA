@@ -1,2 +1,7 @@
 /DBA_P2/nbproject/private/
 .bin
+.vscode
+/DBA_P2/build/
+/DBA_P2/dist/
+APDescription.txt
+MTPs-Main-Container.txt
