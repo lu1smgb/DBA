@@ -39,6 +39,11 @@ public class Coordinates {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
+
     // public static void main(String args[]) {
     //     Coordinates c1 = new Coordinates(1,3);
     //     Coordinates c2 = new Coordinates(1,3);
