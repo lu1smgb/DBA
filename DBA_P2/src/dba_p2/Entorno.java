@@ -1,286 +1,115 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package dba_p2;
 
-import javax.management.InvalidAttributeValueException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Entorno {
+    private Nodo[][] mapa_heu;
+    Nodo destino;
+    Nodo agente_actual;
+    private int cont;
 
-    private Mapa mapa;
-    private Coordinates posicionAgente;
-    private Coordinates posicionObjetivo;
-    
-    /**
-     * <h2>Constructor</h2>
-     * 
-     * Crea un entorno a partir de un mapa, la posicion del agente y la posicion del objetivo
-     * <p>
-     * Si alguna de las posiciones proporcionadas no es valida, se intentara buscar una nueva
-     * <p>
-     * Para la posicion del agente se empezara desde la esquina superior izquierda (0,0) y se ira iterando de izquierda a derecha, de arriba a abajo
-     * Para la posicion del objetivo se empezara desde la esquina inferior derecha (columnas-1, filas-1)
-     * 
-     * @param mapa El mapa
-     * @param posicionAgente Posicion inicial del agente en el entorno
-     * @param posicionObjetivo Posicion del objetivo en el entorno
-     * @throws InvalidAttributeValueException En caso de que una de las posiciones no sea
-     * valida y no se pueda encontrar una nueva posicion valida (se da en casos donde el
-     * mapa esta completamente lleno de celdas que no pueden ser transitadas por el agente)
-     */
-    Entorno(Mapa mapa, Coordinates posicionAgente, Coordinates posicionObjetivo) 
-    throws InvalidAttributeValueException {
-        
-        this.mapa = mapa;
-
-        boolean posicionAgenteValido = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, posicionAgente);
-        boolean posicionObjetivoValida = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, posicionObjetivo);
-
-        // Si la posicion proporcionada no es valida, intentaremos encontrar una nueva
-        // La busqueda se hara de columna a columna, de izquierda a derecha
-        if (!posicionAgenteValido) {
-
-            Coordinates nuevaPosicionAgente = new Coordinates(0, 0);
-            posicionAgenteValido = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, nuevaPosicionAgente);
-
-            while (!posicionAgenteValido) {
-                if (nuevaPosicionAgente.y < getNumFilas() - 1) {
-                    nuevaPosicionAgente.y++;
-                }
-                else if (nuevaPosicionAgente.y >= getNumFilas() - 1) {
-                    if (nuevaPosicionAgente.x < getNumColumnas() - 1) {
-                        nuevaPosicionAgente.x++;
-                    }
-                    else if (nuevaPosicionAgente.x >= getNumColumnas() - 1) {
-                        throw new InvalidAttributeValueException(
-                            "La posicion del agente es invalida y no se ha podido encontrar una posicion valida");
-                    }
-                }
-                posicionAgenteValido = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, nuevaPosicionAgente);
-            }
-
-            this.posicionAgente = nuevaPosicionAgente;
-
-        }
-        else {
-            this.posicionAgente = posicionAgente;
-        }
-
-        // Lo mismo que antes, pero para la posicion del objetivo
-        // La busqueda se hara de fila a fila, de abajo a arriba
-        if (!posicionObjetivoValida) {
-
-            Coordinates nuevaPosicionObjetivo = new Coordinates(getNumColumnas() - 1, getNumFilas() - 1);
-            posicionObjetivoValida = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, nuevaPosicionObjetivo);
-
-            while (!posicionObjetivoValida) {
-                if (nuevaPosicionObjetivo.x > 0) {
-                    nuevaPosicionObjetivo.x--;
-                }
-                else if (nuevaPosicionObjetivo.x <= 0) {
-                    if (nuevaPosicionObjetivo.y > 0) {
-                        nuevaPosicionObjetivo.y--;
-                    }
-                    else if (nuevaPosicionObjetivo.y <= 0) {
-                        throw new InvalidAttributeValueException(
-                            "La posicion del objetivo es invalida y no se ha podido encontrar una posicion valida");
-                    }
-                }
-                posicionObjetivoValida = this.mapa.hayCeldaEnCoordenadas(Celda.VOID, nuevaPosicionObjetivo);
-            }
-
-            this.posicionAgente = nuevaPosicionObjetivo;
-
-        }
-        else {
-            this.posicionObjetivo = posicionObjetivo;
-        }
-        
-    }
-
-    /**
-     * <h2>Constructor</h2>
-     * 
-     * Construye un entorno a partir de un mapa
-     * <p>
-     * Las posiciones vendran dadas por defecto:
-     * <ul>
-     *      <li>Agente: (0,0)</li>
-     *      <li>Objetivo (columnas-1, filas-1)</li>
-     * </ul>
-     * En caso de que no se puedan inicializar las posiciones en el mapa,
-     * se ajustaran como sea necesario
-     * 
-     * @param mapa
-     * @throws InvalidAttributeValueException
-     * @see {@link #Entorno(Mapa, Coordinates, Coordinates)}
-     */
-    Entorno(Mapa mapa) 
-    throws InvalidAttributeValueException {
-
-        this(mapa, new Coordinates(0, 0), new Coordinates(mapa.getNumberOfCols() - 1, mapa.getNumberOfRows() - 1));
-
-    }
-
-    /**
-     * <h2>Getter mapa.name</h2>
-     * @return Nombre del mapa
-     */
-    public String getNombre() {
-        return this.mapa.getName();
-    }
-
-    /**
-     * <h2>Setter mapa.name</h2>
-     * Modifica el nombre del mapa
-     * @param nombre Nuevo nombre del mapa
-     */
-    public void setNombre(String nombre) {
-        this.mapa.setName(nombre);
-    }
-
-    /**
-     * <h2>Getter mapa.num_rows</h2>
-     * @return Numero de filas del mapa
-     */
-    public int getNumFilas() {
-        return this.mapa.getNumberOfRows();
-    }
-
-    /**
-     * <h2>Getter mapa.num_columns</h2>
-     * @return Numero de columnas del mapa
-     */
-    public int getNumColumnas() {
-        return this.mapa.getNumberOfCols();
-    }
-
-    /**
-     * <h2>Getter posicionAgente</h2>
-     * @return Posicion actual del agente
-     */
-    public Coordinates getPosicionAgente() {
-        return this.posicionAgente;
-    }
-
-    /**
-     * <h2>Getter posicionObjetivo</h2>
-     * @return Posicion del objetivo
-     */
-    public Coordinates getPosicionObjetivo() {
-        return this.posicionObjetivo;
-    }
-
-    /**
-     * <h2>Metodo coordenadasValidas</h2>
-     * @return Si las coordenadas se encuentran dentro de los limites del mapa
-     */
-    public boolean coordenadasValidas(Coordinates c) {
-        return c.x >= 0 && c.x < this.mapa.getNumberOfCols() && c.y >= 0 && c.y < this.mapa.getNumberOfRows();
-    }
-
-    /**
-     * <h2>Metodo moverAgente</h2>
-     * 
-     * Mueve el agente hacia unas coordenadas, siempre que este pueda hacerlo
-     * 
-     * @param nuevaPosicion Nueva posicion del agente
-     * @return Si el agente ha podido moverse
-     */
-    public boolean moverAgente(Coordinates nuevaPosicion) {
-        System.out.println("--- INICIA MOVIMIENTO ---");
-        if (nuevaPosicion == null || this.mapa.hayCeldaEnCoordenadas(Celda.WALL, nuevaPosicion)) {
-            System.out.println("Agente NO PUEDE moverse:\t " + this.posicionAgente + " -> " + nuevaPosicion);
-            System.out.println("--- TERMINA MOVIMIENTO ---");
-            return false;
-        }
-        System.out.println("Agente se mueve:\t " + this.posicionAgente + " -> " + nuevaPosicion);
-        this.posicionAgente = nuevaPosicion;
-        System.out.println("--- TERMINA MOVIMIENTO ---");
-        return true;
-    }
-
-    /**
-     * <h2>Metodo objetivoCumplido</h2>
-     * @return Si el agente ha alcanzado al objetivo
-     */
-    public boolean objetivoCumplido() {
-        return this.posicionAgente.equals(this.posicionObjetivo);
-    }
-
-    /**
-     * <h2>Metodo getElement</h2>
-     * @param x Coordenada x
-     * @param y Coordenada y
-     * @return Tipo de celda en las coordenadas especificadas
-     * @throws IndexOutOfBoundsException Si la coordenada se encuentra fuera de los limites del mapa
-     */
-    public Celda getElement(int x, int y) throws IndexOutOfBoundsException {
-        return this.mapa.getElement(y, x);
-    }
-
-    /**
-     * <h2>Metodo getElement</h2>
-     * @param coordenadas Coordenadas
-     * @return Tipo de celda en las coordenadas especificadas
-     * @throws IndexOutOfBoundsException Si la coordenada se encuentra fuera de los limites del mapa
-     */
-    public Celda getElement(Coordinates coordenadas) throws IndexOutOfBoundsException {
-        return this.mapa.getElement(coordenadas);
-    }
-
-    /**
-     * <h2>Metodo toString</h2>
-     * 
-     * Muestra por salida estandar los datos del entorno:
-     * <ul>
-     *      <li>Nombre del mapa</li>
-     *      <li>Dimensiones del mapa</li>
-     *      <li>Posicion del agente</li>
-     *      <li>Posicion del objetivo</li>
-     *      <li>Representacion mas legible del mapa</li>
-     * </ul>
-     * @return String con los datos del entorno
-     */
-    @Override
-    public String toString() {
-        
-        String str = "";
-        str += "Mapa: " + this.mapa.getName() + "\n";
-
-        int numFilas = this.mapa.getNumberOfRows();
-        int numColumnas = this.mapa.getNumberOfCols();
-        str += "Dimensiones (columnas,filas): (" + numColumnas + ", " + numFilas + ")\n";
-
-        str += "Posicion del agente: " + this.posicionAgente + "\n";
-        str += "Posicion del objetivo: " + this.posicionObjetivo + "\n";
-
-        Coordinates itPosicion = new Coordinates(0, 0);
-        String outputElement;
-        for (int i=0; i < numFilas; i++) {
-            for (int j=0; j < numColumnas; j++) {
-                itPosicion.x = j; itPosicion.y = i;
-                if (itPosicion.equals(this.posicionAgente)) {
-                    outputElement = "A";
-                }
-                else if (itPosicion.equals(this.posicionObjetivo)) {
-                    outputElement = "$";
-                }
-                else {
-                    if (this.mapa.hayCeldaEnCoordenadas(Celda.VOID, itPosicion)) {
-                        outputElement = "-";
-                    }
-                    else if (this.mapa.hayCeldaEnCoordenadas(Celda.WALL, itPosicion)) {
-                        outputElement = "#";
-                    }
-                    else {
-                        outputElement = "?";
-                    }
-                    ////outputElement = String.valueOf(this.mapa.getElement(itPosicion).value());
-                }
-                // Si leemos el ultimo elemento de la fila, hacemos un linebreak (\n)
-                str += outputElement + (j == numColumnas - 1 ? "\n" : "\t");
+    public Entorno(int[][] mapa, int ox, int oy, int dx, int dy) {
+        destino = new Nodo(dx, dy, 0, true);
+        mapa_heu = new Nodo[mapa.length][mapa[0].length];
+        for (int i = 0; i < mapa.length; i++) {
+            for (int j = 0; j < mapa[i].length; j++) {
+                mapa_heu[i][j] = new Nodo(i, j, mapa[i][j], false);
+                mapa_heu[i][j].setHeu(destino);
             }
         }
-        return str;
+        agente_actual = new Nodo(ox, oy, 0, false);
+        agente_actual.setHeu(destino);
+    }
 
+    public List<Nodo> obtenerNodosAdyacentes() {
+        List<Nodo> adyacentes = new ArrayList<>();
+
+        // Nodo arriba
+        Nodo nodoArriba = obtenerNodo(agente_actual.x - 1, agente_actual.y);
+        if (nodoArriba != null) {
+            adyacentes.add(nodoArriba);
+        }
+
+        // Nodo abajo
+        Nodo nodoAbajo = obtenerNodo(agente_actual.x + 1, agente_actual.y);
+        if (nodoAbajo != null) {
+            adyacentes.add(nodoAbajo);
+        }
+
+        // Nodo izquierda
+        Nodo nodoIzquierda = obtenerNodo(agente_actual.x, agente_actual.y - 1);
+        if (nodoIzquierda != null) {
+            adyacentes.add(nodoIzquierda);
+        }
+
+        // Nodo derecha
+        Nodo nodoDerecha = obtenerNodo(agente_actual.x, agente_actual.y + 1);
+        if (nodoDerecha != null) {
+            adyacentes.add(nodoDerecha);
+        }
+
+        return adyacentes;
+    }
+
+    private Nodo obtenerNodo(int x, int y) {
+        // Verifica si las coordenadas están dentro de los límites del mapa
+        if (x >= 0 && x < mapa_heu.length && y >= 0 && y < mapa_heu[0].length) {
+            return mapa_heu[x][y];
+        } else {
+            // Si las coordenadas están fuera de los límites, devuelve null
+            return null;
+        }
+    }
+
+    public void setAgenteActual(Nodo nuevoAgente) {
+        // Verifica si las nuevas coordenadas están dentro de los límites del mapa
+        if (nuevoAgente.x >= 0 && nuevoAgente.x < mapa_heu.length
+                && nuevoAgente.y >= 0 && nuevoAgente.y < mapa_heu[0].length) {
+            agente_actual = nuevoAgente;
+        } else {
+            // Manejo de error: las coordenadas están fuera de los límites, podrías lanzar
+            // una excepción o manejarlo de otra manera según tus necesidades
+            System.out.println("Error: Las nuevas coordenadas del agente están fuera de los límites del mapa.");
+        }
+    }
+
+    public int getTamEntorno() {
+        if (mapa_heu.length >= mapa_heu[0].length) {
+            return mapa_heu.length;
+        } else {
+            return mapa_heu[0].length;
+        }
+    }
+
+    public void mostrarEstado() {
+        // Muestra la posición del agente, la del objetivo y el mapa en la terminal
+        System.out.println("Posición del agente: (" + agente_actual.x + ", " + agente_actual.y + ")");
+        System.out.println("Posición del objetivo: (" + destino.x + ", " + destino.y + ")");
+        System.out.println("Estado del mapa:");
+        for (int i = 0; i < mapa_heu.length; i++) {
+            for (int j = 0; j < mapa_heu[0].length; j++) {
+                if (agente_actual.x == i && agente_actual.y == j) {
+                    System.out.print("A "); // Marca la posición del agente
+                } else if (destino.x == i && destino.y == j) {
+                    System.out.print("D "); // Marca la posición del objetivo
+                } else {
+                    if (mapa_heu[i][j].val != -1) {
+                        System.out.print(mapa_heu[i][j].val + " ");
+                    } else {
+                        System.out.print("X" + " ");
+                    }
+                }
+            }
+            System.out.println();
+        }
+        System.out.println("-------------");
+        cont++;
+        System.out.println("PASOS: " + cont + "\n");
     }
 
 }
