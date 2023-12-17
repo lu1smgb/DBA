@@ -4,70 +4,69 @@
  */
 package dba_p2;
 
-import jade.core.AID;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
-
-import jade.core.Agent;
+import jade.core.AID;
 import jade.core.behaviours.CyclicBehaviour;
 
 /**
  *
  * @author ana
  */
-public class BehaviourAceptarCodigo {
+public class BehaviourAceptarCodigo extends CyclicBehaviour {
+    int step = 0;
+    String codigo = "cacahuete";
+    protected AgentePrueba agente;
     
-}
-
-
-
-
-public class ComportamientoEmisor extends OneShotBehaviour {
-
-    @Override
-    public void action() {
-        // Configurar el agente emisor
-
-        // Crear un mensaje de propuesta (PROPOSE)
-        ACLMessage propuesta = new ACLMessage(ACLMessage.PROPOSE);
-        propuesta.addReceiver(new AID("AgenteReceptor", AID.ISLOCALNAME));
-        propuesta.setContent("Código a verificar: ..."); // Puedes enviar el código aquí
-
-        // Enviar la propuesta al agente receptor
-        myAgent.send(propuesta);
+    
+    public BehaviourAceptarCodigo(AgentePrueba a) {
+        agente = a;
     }
-}
-
-public class ComportamientoReceptor extends CyclicBehaviour {
-
+    
     @Override
-    public void action() {
-        // Recibir la propuesta (PROPOSE)
-        ACLMessage propuesta = myAgent.receive();
-
-        if (propuesta != null) {
-            // Verificar el código (aquí debes implementar tu lógica de verificación)
-            boolean codigoCorrecto = verificarCodigo(propuesta.getContent());
-
-            // Responder con accept-proposal o reject-proposal
-            ACLMessage respuesta = propuesta.createReply();
-            if (codigoCorrecto) {
-                respuesta.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-            } else {
-                respuesta.setPerformative(ACLMessage.REJECT_PROPOSAL);
-            }
-
-            // Enviar la respuesta al agente emisor
-            myAgent.send(respuesta);
-        } else {
-            // Si no hay mensaje, bloquear el comportamiento hasta que llegue un mensaje
-            block();
+    public void action(){
+        switch(step){
+            case 0:
+                ACLMessage propuesta = new ACLMessage(ACLMessage.PROPOSE);
+                propuesta.addReceiver(new AID("RudolphPrueba", AID.ISLOCALNAME));
+                propuesta.setConversationId(codigo); // establecer el codigo como id de la conversación
+                propuesta.setContent(codigo);
+                agente.send(propuesta);
+                System.out.println("Mandada proposición a rudolph con codigo:"+codigo);
+                step = 1;
+            case 1:
+                System.out.println("Agente espera respuesta de Rudolph");
+                propuesta = agente.blockingReceive(); // espera respuesta de rudolph
+                System.out.println("Respuesta de Rudolph recibida");
+                
+                if (propuesta.getConversationId().equals(codigo) &&
+                    propuesta.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
+                        System.out.println("Rudolph acepta propuesta");
+                        ACLMessage solicitud = propuesta.createReply(ACLMessage.REQUEST);
+                        solicitud.setContent("Solicitud de coordenadas"); 
+                        System.out.println("Agente pide coordenadas");
+                        agente.send(solicitud);
+                        step = 2;
+                    } else {
+                        // me ha rechazado la propuesta
+                        System.out.println("Rudolph me ha rechazado :(");
+                        agente.doDelete();
+                    }
+            break;
+            case 2:
+                System.out.println("Esperando coordenadas de Rudolph");
+                ACLMessage respuesta = agente.blockingReceive();
+                System.out.println("Recibidas coordenadas de Rudolph");
+                
+                if (respuesta.getConversationId().equals(codigo) &&
+                        respuesta.getPerformative() == ACLMessage.INFORM) {
+                    String coordenadas = respuesta.getContent(); // cambiar al tipo que sean
+                    System.out.println("Coordenadas recibidas: " + coordenadas);
+                } else {
+                    // Manejar otras respuestas o errores (opcional)
+                    System.out.println("Error en el protocolo de conversación - paso 2");
+                    agente.doDelete();
+                }
         }
     }
-
-    private boolean verificarCodigo(String codigo) {
-        // Aquí debes implementar la lógica de verificación del código
-        // Devuelve true si es correcto, false si no lo es
-        return codigo.equals("código correcto");
-    }
 }
+
