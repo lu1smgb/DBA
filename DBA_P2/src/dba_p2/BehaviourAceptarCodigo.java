@@ -61,6 +61,10 @@ public class BehaviourAceptarCodigo extends CyclicBehaviour {
                         respuesta.getPerformative() == ACLMessage.INFORM) {
                     String coordenadas = respuesta.getContent(); // cambiar al tipo que sean
                     System.out.println("Coordenadas recibidas: " + coordenadas);
+                    
+                    //Esto se haría al llegar a cada objetivo
+                    ACLMessage request = respuesta.createReply(ACLMessage.REQUEST);
+                    agente.send(request);
                 } else {
                     // Manejar otras respuestas o errores (opcional)
                     System.out.println("Error en el protocolo de conversación - paso 2");

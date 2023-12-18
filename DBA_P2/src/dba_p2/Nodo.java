@@ -38,4 +38,9 @@ public class Nodo {
         }
         return false;
     }
+    
+    public String toString() {
+        return Integer.toString(x) + " " + Integer.toString(y) + " " + Integer.toString(val) + " " + Integer.toString(heu);
+    }
+
 }
